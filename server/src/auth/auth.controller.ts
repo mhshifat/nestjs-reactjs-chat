@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
-import { Routes, Services } from '../utils/types';
+import { UsersService } from 'src/users/users.service';
+import { Routes, Services } from '../utils/constants';
 import { IAuthService } from './auth.types';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 
 @Controller(Routes.AUTH)
 export class AuthController {
-  constructor(@Inject(Services.AUTH) private authService: IAuthService) { }
+  constructor(
+    @Inject(Services.AUTH) private authService: IAuthService,
+    @Inject(Services.USERS) private usersService: UsersService
+  ) { }
 
   @Get("status")
   status() {
@@ -24,6 +28,6 @@ export class AuthController {
 
   @Post("register")
   registerUser(@Body() createUserDto: CreateUserDto) {
-    console.log(createUserDto)
+    this.usersService.createUser(createUserDto)
   }
 }
