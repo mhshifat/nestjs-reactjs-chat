@@ -6,7 +6,7 @@ import { User } from './../../utils/typeorm/entities/User';
 
 export class SessionSerializer extends PassportSerializer {
   constructor(
-    @Inject(Services.AUTH) private readonly userService: IUserService
+    @Inject(Services.USERS) private readonly userService: IUserService
   ) {
     super();
   }
@@ -16,7 +16,9 @@ export class SessionSerializer extends PassportSerializer {
   }
 
   async deserializeUser(payload: User, done: (err: null, user: User | null) => void) {
+    console.log({ payload });
+
     const userDb = await this.userService.findUser({ id: payload.id });
-    done(null, userDb);
+    done(null, userDb || null)
   }
 }

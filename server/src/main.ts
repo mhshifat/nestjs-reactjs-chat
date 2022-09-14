@@ -14,6 +14,7 @@ async function bootstrap() {
   const { PORT } = process.env;
   app.setGlobalPrefix("api");
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors({ origin: ["http://localhost:3000"], credentials: true });
   app.use([
     session({
       secret: process.env.COOKIE_SECRET,
@@ -24,9 +25,9 @@ async function bootstrap() {
       },
       store: new TypeormStore().connect(sessionRepository)
     }),
-    passport.initialize(),
-    passport.session(),
   ])
+  app.use(passport.initialize())
+  app.use(passport.session());
 
   try {
     await app.listen(PORT || 8000, () =>

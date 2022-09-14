@@ -14,6 +14,10 @@ export class UsersService implements IUserService {
     return this.userRepo.findOne(findUserParams);
   }
 
+  async find(findUserParams?: FindUserParams) {
+    return this.userRepo.find(findUserParams);
+  }
+
   async createUser(userDetails: CreateUserDetails) {
     const existingUser = await this.userRepo.findOne({ email: userDetails.email });
     if (existingUser) throw new HttpException("User Already Exists!", HttpStatus.CONFLICT);

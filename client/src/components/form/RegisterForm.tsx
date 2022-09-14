@@ -8,17 +8,18 @@ import {
 	InputLabel,
 } from "../../utils/styles";
 import styles from "./index.module.scss";
+import { postRegisterUser } from "../../utils/api";
+import { CreateUserParams } from "../../utils/types";
 
 export default function RegisterForm() {
-	const {
-		handleSubmit,
-		register,
-		formState: { errors },
-	} = useForm();
-	console.log({ errors });
+	const { handleSubmit, register } = useForm<CreateUserParams>();
 
-	const handleRegister = useCallback((formValues: any) => {
-		console.log({ formValues });
+	const handleRegister = useCallback(async (formValues: CreateUserParams) => {
+		try {
+			await postRegisterUser(formValues);
+		} catch (err) {
+			console.error(err);
+		}
 	}, []);
 
 	return (
@@ -62,7 +63,7 @@ export default function RegisterForm() {
 				<InputField
 					type="password"
 					id="password"
-					{...register("Password", {
+					{...register("password", {
 						required: "Password is required!",
 					})}
 				/>

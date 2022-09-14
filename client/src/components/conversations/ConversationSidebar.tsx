@@ -8,7 +8,7 @@ import { TbEdit } from "react-icons/tb";
 import { ConversationType } from "../../utils/types";
 import styles from "./index.module.scss";
 import { useCallback } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 interface Props {
 	conversations: ConversationType[];
 }
@@ -24,7 +24,7 @@ export default function ConversationSidebar({ conversations }: Props) {
 		<CoversationsSidebarStyle>
 			<ConversationSidebarHeader>
 				<h1>Conversations</h1>
-				<TbEdit size={40} />
+				<TbEdit size={40} cursor="pointer" />
 			</ConversationSidebarHeader>
 			<CoversationsSidebarContainer>
 				{conversations.map(({ id, name, lastMessage }) => (

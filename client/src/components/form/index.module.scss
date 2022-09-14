@@ -19,7 +19,7 @@
 }
 
 .footerText {
-  & :last-child {
+  & a {
     text-decoration: underline;
     color: rgba(184, 184, 184, 1);
   }

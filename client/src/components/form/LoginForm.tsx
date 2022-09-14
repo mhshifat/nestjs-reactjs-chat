@@ -1,24 +1,45 @@
 import { useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { postloginUser } from "../../utils/api";
 import {
 	Button,
 	InputContainer,
 	InputField,
 	InputLabel,
 } from "../../utils/styles";
+import { UserCredentialsParams } from "../../utils/types";
 import styles from "./index.module.scss";
 
+const DEMO_ACCOUNTS: Record<number, { email: string; password: string }> = {
+	1: {
+		email: "userone@gmail.com",
+		password: "abc123",
+	},
+	2: {
+		email: "usertwo@gmail.com",
+		password: "abc123",
+	},
+};
 export default function LoginForm() {
-	const {
-		handleSubmit,
-		register,
-		formState: { errors },
-	} = useForm();
-	console.log({ errors });
-	const handleLogin = useCallback((formValues: any) => {
-		console.log({ formValues });
-	}, []);
+	const navigate = useNavigate();
+	const { handleSubmit, register, reset } = useForm<UserCredentialsParams>();
+
+	const handleTestUserSet = useCallback(
+		async (docNum: number) => reset(DEMO_ACCOUNTS[docNum]),
+		[reset]
+	);
+	const handleLogin = useCallback(
+		async (formValues: UserCredentialsParams) => {
+			try {
+				await postloginUser(formValues);
+				navigate("/conversations");
+			} catch (err) {
+				console.error(err);
+			}
+		},
+		[navigate]
+	);
 
 	return (
 		<form className={styles.form} onSubmit={handleSubmit(handleLogin)}>
@@ -51,6 +72,16 @@ export default function LoginForm() {
 			<div className={styles.footerText}>
 				<span>Don't have an account? </span>
 				<Link to="/register">Register</Link>
+			</div>
+			<div className={styles.footerText}>
+				<span>Need some test account? </span>
+				<Link to="#" onClick={() => handleTestUserSet(1)}>
+					User One,
+				</Link>
+				&nbsp;
+				<Link to="#" onClick={() => handleTestUserSet(2)}>
+					User Two
+				</Link>
 			</div>
 		</form>
 	);
