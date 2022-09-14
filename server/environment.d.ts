@@ -5,5 +5,6 @@ declare namespace NodeJS {
     MYSQL_USER?: string
     MYSQL_PASSWORD?: string
     MYSQL_ROOT_PASSWORD?: string
+    COOKIE_SECRET?: string
   }
 }
