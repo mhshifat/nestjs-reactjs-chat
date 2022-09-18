@@ -11,7 +11,7 @@ export class UsersService implements IUserService {
   constructor(@InjectRepository(User) private readonly userRepo: Repository<User>) { }
 
   async findUser(findUserParams: FindUserParams) {
-    return this.userRepo.findOne(findUserParams);
+    return this.userRepo.findOne(findUserParams, { relations: ["participant"] });
   }
 
   async find(findUserParams?: FindUserParams) {
@@ -24,5 +24,9 @@ export class UsersService implements IUserService {
     const password = await hashPassword(userDetails.password);
     const newUser = await this.userRepo.create({ ...userDetails, password });
     return this.userRepo.save(newUser);
+  }
+
+  async saveUser(user: User) {
+    return this.userRepo.save(user);
   }
 }
