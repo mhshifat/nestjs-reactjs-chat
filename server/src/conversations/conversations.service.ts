@@ -5,14 +5,12 @@ import { IConversationsService } from './conversations.types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constants';
-import { ParticipantsService } from 'src/participants/participants.service';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ConversationsService implements IConversationsService {
   constructor(
     @InjectRepository(Conversation) private readonly conversationRepo: Repository<Conversation>,
-    @Inject(Services.PARTICIPANTS) private readonly participantService: ParticipantsService,
     @Inject(Services.USERS) private readonly userService: UsersService,
   ) { }
 
