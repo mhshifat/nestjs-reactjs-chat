@@ -1,5 +1,5 @@
 import { Inject, Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { Conversation, User, Participant } from 'src/utils/typeorm';
+import { Conversation, User } from 'src/utils/typeorm';
 import { CreateConversationDetails } from 'src/utils/types';
 import { IConversationsService } from './conversations.types';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,29 +16,27 @@ export class ConversationsService implements IConversationsService {
     @Inject(Services.USERS) private readonly userService: UsersService,
   ) { }
 
-  async createConversation(user: User, payload: CreateConversationDetails): Promise<Conversation> {
-    const participants: Participant[] = [];
-    const userDb = await this.userService.findUser({ id: user.id });
-    if (!userDb.participant) {
-      const participant = await this.createParticipantAndSaveUser(userDb, payload.authorId);
-      participants.push(participant);
-    } else participants.push(userDb.participant);
-    const recipient = await this.userService.findUser({ id: payload.recipientId });
-    if (!recipient) throw new HttpException("Recipient not found", HttpStatus.BAD_REQUEST);
-    if (!recipient.participant) {
-      const participant = await this.createParticipantAndSaveUser(recipient, payload.recipientId);
-      participants.push(participant);
-    } else participants.push(recipient.participant);
-    const newConversation = this.conversationRepo.create({
-      participants
-    });
-    return this.conversationRepo.save(newConversation);
+  findConversationById(id: number): Promise<Conversation> {
+    return this.conversationRepo.findOne(id, { relations: ["creator", "recipient"] });
   }
 
-  public async createParticipantAndSaveUser(user: User, id: number) {
-    const newParticipant = await this.participantService.createParticipant({ id });
-    user.participant = newParticipant;
-    await this.userService.saveUser(user);
-    return newParticipant;
+  async find(id: number) {
+    return this.conversationRepo
+      .createQueryBuilder("conversation")
+      .leftJoinAndSelect("conversation.creator", "creator")
+      .leftJoinAndSelect("conversation.recipient", "recipient")
+      .where("creator.id", { id })
+      .orWhere("recipient.id", { id })
+      .getMany();
+  }
+
+  async createConversation(user: User, payload: CreateConversationDetails): Promise<Conversation> {
+    const recipient = await this.userService.findUser({ id: payload.recipientId });
+    if (!recipient) throw new HttpException("Recipient not found!", HttpStatus.NOT_FOUND);
+    const newConversation = this.conversationRepo.create({
+      creator: user,
+      recipient,
+    })
+    return this.conversationRepo.save(newConversation);
   }
 }

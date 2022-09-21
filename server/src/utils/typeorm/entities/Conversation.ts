@@ -1,11 +1,16 @@
-import { Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Participant } from "./Participant";
+import { Column, Entity, JoinColumn, ManyToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./User";
 
 @Entity({ name: "conversations" })
 export class Conversation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => Participant, (participant) => participant.conversation)
-  participants: Participant[];
+  @OneToOne(() => User)
+  @JoinColumn()
+  creator: User;
+
+  @OneToOne(() => User)
+  @JoinColumn()
+  recipient: User;
 }

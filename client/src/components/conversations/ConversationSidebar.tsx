@@ -5,22 +5,31 @@ import {
 	CoversationsSidebarStyle,
 } from "../../utils/styles";
 import { TbEdit } from "react-icons/tb";
-import { ConversationType } from "../../utils/types";
+import { Conversation } from "../../utils/types";
 import styles from "./index.module.scss";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateConversationModal from "./../modals/CreateConversationModal";
+import useAuth from "../../hooks/useAuth";
 interface Props {
-	conversations: ConversationType[];
+	conversations: Conversation[];
 }
 
 export default function ConversationSidebar({ conversations }: Props) {
+	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [showModal, setShowModal] = useState(false);
 
 	const goToSpecifiqConversation = useCallback(
-		(id: ConversationType["id"]) => navigate(`/conversations/${id}`),
+		(id: Conversation["id"]) => navigate(`/conversations/${id}`),
 		[navigate]
+	);
+	const getDisplayedUser = useCallback(
+		(conversation: Conversation) =>
+			conversation.creator.id === user?.id
+				? conversation.recipient
+				: conversation.creator,
+		[user?.id]
 	);
 	return (
 		<>
@@ -33,16 +42,20 @@ export default function ConversationSidebar({ conversations }: Props) {
 					</div>
 				</ConversationSidebarHeader>
 				<CoversationsSidebarContainer>
-					{conversations.map(({ id, name, lastMessage }) => (
+					{conversations.map((conversation) => (
 						<CoversationsSidebarItem
-							key={id}
-							onClick={() => goToSpecifiqConversation(id)}
+							key={conversation.id}
+							onClick={() => goToSpecifiqConversation(conversation.id)}
 						>
 							<div className={styles.conversationAvatar}></div>
 							<div>
-								<span className={styles.conversationName}>{name}</span>
+								<span className={styles.conversationName}>
+									{`${getDisplayedUser(conversation).firstName} ${
+										getDisplayedUser(conversation).lastName
+									}`}
+								</span>
 								<span className={styles.conversationLastMessage}>
-									{lastMessage}
+									{"Simple Text"}
 								</span>
 							</div>
 						</CoversationsSidebarItem>

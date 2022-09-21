@@ -11,7 +11,7 @@ export class UsersService implements IUserService {
   constructor(@InjectRepository(User) private readonly userRepo: Repository<User>) { }
 
   async findUser(findUserParams: FindUserParams) {
-    return this.userRepo.findOne(findUserParams, { relations: ["participant"] });
+    return this.userRepo.findOne(findUserParams);
   }
 
   async find(findUserParams?: FindUserParams) {

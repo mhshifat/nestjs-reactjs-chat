@@ -19,8 +19,4 @@ export class User {
   @Column()
   @Exclude()
   password: string;
-
-  @OneToOne(() => Participant)
-  @JoinColumn()
-  participant: Participant
 }

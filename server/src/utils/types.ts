@@ -22,7 +22,6 @@ export type CreateParticipantDetails = {
 }
 
 export type CreateConversationDetails = {
-  authorId: number;
   recipientId: number;
   message: string;
 }
