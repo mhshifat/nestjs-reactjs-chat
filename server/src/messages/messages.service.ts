@@ -24,14 +24,15 @@ export class MessagesService implements IMessagesService {
       .getOne();
 
     if (!conversation) throw new HttpException("Conversation not found", HttpStatus.BAD_REQUEST);
-    conversation.creator = instanceToPlain(conversation.creator) as User;
-    conversation.recipient = instanceToPlain(conversation.recipient) as User;
 
     const newMessage = this.messageRepo.create({
       content,
       author: instanceToPlain(user),
       conversation,
     });
-    return this.messageRepo.save(newMessage);
+    const savedMessage = await this.messageRepo.save(newMessage);
+    conversation.lastMessageSent = savedMessage;
+    await this.conversationRepo.save(conversation);
+    return;
   }
 }
