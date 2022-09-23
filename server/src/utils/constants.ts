@@ -3,6 +3,7 @@ export enum Routes {
   USERS = 'users',
   PARTICIPANTS = 'participants',
   CONVERSATIONS = 'conversations',
+  MESSAGES = 'messages',
 }
 
 export enum Services {
@@ -10,4 +11,5 @@ export enum Services {
   USERS = 'USERS_SERVICE',
   PARTICIPANTS = 'PARTICIPANTS_SERVICE',
   CONVERSATIONS = 'CONVERSATIONS_SERVICE',
+  MESSAGES = 'MESSAGES_SERVICE',
 }

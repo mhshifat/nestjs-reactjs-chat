@@ -20,7 +20,9 @@ export class User {
   @Exclude()
   password: string;
 
-  @OneToMany(() => Message, (message) => message.author)
+  @OneToMany(() => Message, (message) => message.author, {
+    cascade: ["insert", "update", "remove"]
+  })
   @JoinColumn()
   messages: Message[]
 }

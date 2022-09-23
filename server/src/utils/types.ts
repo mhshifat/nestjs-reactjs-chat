@@ -33,3 +33,8 @@ export type FindParticipantParams = Partial<{
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
+
+export type CreateMessageDetails = {
+  conversationId: number;
+  content: string;
+}

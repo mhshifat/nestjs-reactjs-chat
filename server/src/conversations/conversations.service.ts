@@ -30,7 +30,7 @@ export class ConversationsService implements IConversationsService {
 
   async createConversation(user: User, payload: CreateConversationDetails): Promise<Conversation> {
     const recipient = await this.userService.findUser({ id: payload.recipientId });
-    if (!recipient) throw new HttpException("Recipient not found!", HttpStatus.NOT_FOUND);
+    if (!recipient) throw new HttpException("Recipient not found!", HttpStatus.BAD_REQUEST);
     const newConversation = this.conversationRepo.create({
       creator: user,
       recipient,

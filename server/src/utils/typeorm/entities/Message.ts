@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Conversation } from './Conversation';
 import { User } from "./User";
 
@@ -10,12 +10,14 @@ export class Message {
   @Column()
   content: string;
 
-  @Column({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at" })
   createdAt: number;
 
   @ManyToOne(() => User, user => user.messages)
+  @JoinColumn()
   author: User;
 
-  @OneToOne(() => Conversation, (conversation) => conversation.messages)
+  @ManyToOne(() => Conversation, (conversation) => conversation.messages)
+  @JoinColumn()
   conversation: Conversation;
 }
