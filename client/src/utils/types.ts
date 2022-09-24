@@ -22,3 +22,10 @@ export type Conversation = {
   creator: User;
   recipient: User;
 }
+
+export type Message = {
+  id: number;
+  content: string;
+  createdAt: string;
+  author: User;
+}

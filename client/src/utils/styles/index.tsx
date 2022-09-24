@@ -1,5 +1,9 @@
 import styled, { css } from "styled-components";
-import { InputContainerProps, PageProps } from "./styleTypes";
+import {
+	InputContainerProps,
+	MessageItemContentProps,
+	PageProps,
+} from "./styleTypes";
 
 const SIDEBAR_WIDTH = 400;
 
@@ -176,4 +180,112 @@ export const TextField = styled.textarea`
 	margin: 4px 0;
 	resize: none;
 	overflow-y: hidden;
+`;
+
+export const MessagesPanelStyle = styled.div`
+	height: 100%;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+`;
+
+export const MessagesPanelBodyStyle = styled.div`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 32px;
+	box-sizing: border-box;
+	padding-top: 100px;
+`;
+
+export const MessagesContainerStyle = styled.div`
+	height: 100%;
+	box-sizing: border-box;
+	padding: 10px 0;
+	display: flex;
+	flex-direction: column-reverse;
+	overflow-y: auto;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+`;
+
+export const MessageInputContainerStyle = styled.div`
+	box-sizing: border-box;
+	background: #101010;
+	border-radius: 10px;
+	padding: 24px 32px;
+`;
+
+export const MessageInputStyle = styled.input`
+	background: inherit;
+	outline: none;
+	border: none;
+	color: #454545;
+	font-family: "Inter";
+	font-size: 18px;
+	width: 100%;
+	box-sizing: border-box;
+	margin: 4px 0;
+	resize: none;
+`;
+
+export const MessageItemContainerStyle = styled.div<MessageItemContentProps>`
+	display: flex;
+	gap: 20px;
+	align-items: flex-start;
+	padding: ${({ padding }) => padding || "10px 0"};
+`;
+
+export const MessageItemAvatarStyle = styled.div`
+	width: 50px;
+	height: 50px;
+	background: salmon;
+	border-radius: 50%;
+	flex-shrink: 0;
+`;
+
+export const MessageItemDetailsStyle = styled.div``;
+export const MessageItemHeaderStyle = styled.div`
+	display: flex;
+	align-items: flex-end;
+	gap: 12px;
+
+	& .name {
+		font-weight: 600;
+		font-size: 16px;
+	}
+
+	& .time {
+		color: #6d6d6d;
+		font-size: 12px;
+		font-weight: 400;
+		font-style: italic;
+	}
+`;
+
+export const MessageItemContentStyle = styled.div<MessageItemContentProps>`
+	padding: ${({ padding }) => padding};
+`;
+
+export const MessagePanelHeaderStyle = styled.header`
+	background: #151515;
+	border-bottom: 1px solid #5454543d;
+	height: 100px;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 32px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+`;
+
+export const DeletedMessageStyle = styled.span`
+	color: #6d6d6d;
+	font-style: italic;
 `;

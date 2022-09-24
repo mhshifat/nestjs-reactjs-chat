@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Conversation } from './Conversation';
 import { User } from "./User";
 
@@ -7,11 +7,11 @@ export class Message {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column("text")
   content: string;
 
   @CreateDateColumn({ name: "created_at" })
-  createdAt: number;
+  createdAt: Date;
 
   @ManyToOne(() => User, user => user.messages)
   @JoinColumn()

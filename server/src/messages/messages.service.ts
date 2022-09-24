@@ -13,6 +13,14 @@ export class MessagesService implements IMessagesService {
     @InjectRepository(Conversation) private readonly conversationRepo: Repository<Conversation>
   ) { }
 
+  getMessage(id: number): Promise<Message> {
+    return this.messageRepo.findOne({ id });
+  }
+
+  getMessages(conversationId: number): Promise<Message[]> {
+    return this.messageRepo.find({ where: { conversation: conversationId }, order: { createdAt: "DESC" }, relations: ["author"] });
+  }
+
   async createMessage(user: User, { content, conversationId }: CreateMessageDetails): Promise<Message> {
     const conversation = await this.conversationRepo
       .createQueryBuilder("conversation")
@@ -29,6 +37,7 @@ export class MessagesService implements IMessagesService {
       content,
       author: instanceToPlain(user),
       conversation,
+      createdAt: new Date()
     });
     const savedMessage = await this.messageRepo.save(newMessage);
     conversation.lastMessageSent = savedMessage;
