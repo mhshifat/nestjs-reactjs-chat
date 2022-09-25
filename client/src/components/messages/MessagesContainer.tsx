@@ -28,7 +28,7 @@ export default function MessagesContainer({ messages }: Props) {
 			} else if (prevMessage?.author.id === message.author.id) {
 				return (
 					<MessageItemContainerStyle key={message.id} padding="0 0 10px">
-						<MessageItemContentStyle padding="0 0 0 70px">
+						<MessageItemContentStyle padding="0 0 0 65px">
 							{message.content || (
 								<DeletedMessageStyle>message deleted</DeletedMessageStyle>
 							)}
@@ -58,12 +58,7 @@ function RenderWholeMessage({
 			<MessageItemAvatarStyle />
 			<MessageItemDetailsStyle>
 				<MessageItemHeaderStyle>
-					<span
-						className="name"
-						style={{
-							color: user?.id === author.id ? "#ff7e7e" : "#5e8bff",
-						}}
-					>
+					<span className="name">
 						{user?.id === author.id
 							? "You"
 							: `${author.firstName} ${author.lastName}`}

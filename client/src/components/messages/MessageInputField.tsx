@@ -8,7 +8,7 @@ interface Props {}
 export default function MessageInputField({}: Props) {
 	return (
 		<MessageInputContainerStyle>
-			<MessageInputStyle />
+			<MessageInputStyle spellCheck={false} />
 		</MessageInputContainerStyle>
 	);
 }

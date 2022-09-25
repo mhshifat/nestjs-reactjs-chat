@@ -1,18 +1,19 @@
 .conversationName {
   display: block;
-  font-weight: bold;
+  font-weight: 400;
   font-size: 16px;
+  line-height: 24px;
 }
 
 .conversationAvatar {
-  background: blue;
-  width: 56px;
-  height: 56px;
+  background: #0c91df;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
 .conversationLastMessage {
-  font-size: 14px;
+  font-size: 13px;
   color: rgba(163, 163, 163, 1);
 }

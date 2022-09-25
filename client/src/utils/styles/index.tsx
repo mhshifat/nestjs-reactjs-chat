@@ -5,7 +5,7 @@ import {
 	PageProps,
 } from "./styleTypes";
 
-const SIDEBAR_WIDTH = 400;
+const SIDEBAR_WIDTH = 320;
 
 export const InputContainer = styled.div<InputContainerProps>`
 	background-color: ${({ backgroundColor }) => backgroundColor || "#131313"};
@@ -95,7 +95,7 @@ export const CoversationsSidebarStyle = styled.aside`
 
 export const ConversationSidebarHeader = styled.header`
 	background-color: #151515;
-	height: 100px;
+	height: 65px;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -109,6 +109,7 @@ export const ConversationSidebarHeader = styled.header`
 
 	& h1 {
 		font-weight: 500;
+		font-size: 18px;
 	}
 `;
 
@@ -118,14 +119,14 @@ export const CoversationChannelPage = styled.div`
 `;
 
 export const CoversationsSidebarContainer = styled.div`
-	padding-top: 100px;
+	padding-top: 65px;
 `;
 
 export const CoversationsSidebarItem = styled.div`
 	display: flex;
 	align-items: center;
-	gap: 20px;
-	padding: 18px 24px;
+	gap: 12px;
+	padding: 12px 24px;
 	border-bottom: 1px solid #5454543d;
 	cursor: pointer;
 	background: #131313;
@@ -194,9 +195,9 @@ export const MessagesPanelBodyStyle = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 32px;
+	padding: 24px;
 	box-sizing: border-box;
-	padding-top: 100px;
+	padding-top: 65px;
 `;
 
 export const MessagesContainerStyle = styled.div`
@@ -216,7 +217,7 @@ export const MessageInputContainerStyle = styled.div`
 	box-sizing: border-box;
 	background: #101010;
 	border-radius: 10px;
-	padding: 24px 32px;
+	padding: 12px 16px;
 `;
 
 export const MessageInputStyle = styled.input`
@@ -225,7 +226,7 @@ export const MessageInputStyle = styled.input`
 	border: none;
 	color: #454545;
 	font-family: "Inter";
-	font-size: 18px;
+	font-size: 16px;
 	width: 100%;
 	box-sizing: border-box;
 	margin: 4px 0;
@@ -240,9 +241,9 @@ export const MessageItemContainerStyle = styled.div<MessageItemContentProps>`
 `;
 
 export const MessageItemAvatarStyle = styled.div`
-	width: 50px;
-	height: 50px;
-	background: salmon;
+	width: 46px;
+	height: 46px;
+	background: #0c91df;
 	border-radius: 50%;
 	flex-shrink: 0;
 `;
@@ -256,6 +257,7 @@ export const MessageItemHeaderStyle = styled.div`
 	& .name {
 		font-weight: 600;
 		font-size: 16px;
+		margin-top: 5px;
 	}
 
 	& .time {
@@ -268,12 +270,16 @@ export const MessageItemHeaderStyle = styled.div`
 
 export const MessageItemContentStyle = styled.div<MessageItemContentProps>`
 	padding: ${({ padding }) => padding};
+	font-size: 14px;
+	line-height: 22px;
+	font-weight: 400;
 `;
 
 export const MessagePanelHeaderStyle = styled.header`
 	background: #151515;
 	border-bottom: 1px solid #5454543d;
-	height: 100px;
+	border-left: 1px solid #5454543d;
+	height: 65px;
 	box-sizing: border-box;
 	display: flex;
 	justify-content: space-between;

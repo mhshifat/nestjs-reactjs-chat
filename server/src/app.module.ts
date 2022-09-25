@@ -6,12 +6,15 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
+import { GatewayModule } from './gateway/gateway.module';
 import entities from './utils/typeorm';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     AuthModule,
     UsersModule,
+    EventEmitterModule.forRoot(),
     ConfigModule.forRoot({ envFilePath: '.env' }),
     PassportModule.register({ session: true }),
     TypeOrmModule.forRoot({
@@ -26,6 +29,7 @@ import entities from './utils/typeorm';
     }),
     ConversationsModule,
     MessagesModule,
+    GatewayModule,
   ],
   controllers: [],
   providers: [],

@@ -38,7 +38,7 @@ export default function ConversationSidebar({ conversations }: Props) {
 				<ConversationSidebarHeader>
 					<h1>Conversations</h1>
 					<div onClick={() => setShowModal((value) => !value)}>
-						<TbEdit size={40} cursor="pointer" />
+						<TbEdit size={24} cursor="pointer" />
 					</div>
 				</ConversationSidebarHeader>
 				<CoversationsSidebarContainer>
