@@ -11,14 +11,16 @@ import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateConversationModal from "./../modals/CreateConversationModal";
 import useAuth from "../../hooks/useAuth";
-interface Props {
-	conversations: Conversation[];
-}
+import { RootState } from "../../store";
+import { useSelector } from "react-redux";
 
-export default function ConversationSidebar({ conversations }: Props) {
+export default function ConversationSidebar() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
 	const [showModal, setShowModal] = useState(false);
+	const conversations = useSelector(
+		(state: RootState) => state.conversationsState.conversations
+	);
 
 	const goToSpecifiqConversation = useCallback(
 		(id: Conversation["id"]) => navigate(`/conversations/${id}`),
@@ -42,7 +44,7 @@ export default function ConversationSidebar({ conversations }: Props) {
 					</div>
 				</ConversationSidebarHeader>
 				<CoversationsSidebarContainer>
-					{conversations.map((conversation) => (
+					{Array.from(conversations.values()).map((conversation) => (
 						<CoversationsSidebarItem
 							key={conversation.id}
 							onClick={() => goToSpecifiqConversation(conversation.id)}

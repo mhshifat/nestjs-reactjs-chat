@@ -11,6 +11,9 @@ import { useState } from "react";
 import { User } from "./utils/types";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "./store";
+import { enableMapSet } from "immer";
+
+enableMapSet();
 
 window.console.error = (err) => {
 	if (err.code === "ERR_CANCELED") return;

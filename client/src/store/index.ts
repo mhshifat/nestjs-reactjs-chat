@@ -5,6 +5,7 @@ export const store = configureStore({
   reducer: {
     conversationsState: converationsReducer
   },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
   devTools: true
 });
 

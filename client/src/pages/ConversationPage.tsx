@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 import ConversationSidebar from "../components/conversations/ConversationSidebar";
-import { getConversations } from "../utils/api";
+import { AppDisopatch } from "../store";
+import { fetchConversationsThunk } from "../store/conversationsSlice";
 import { Page } from "../utils/styles";
-import { Conversation } from "../utils/types";
 
 export default function ConversationPage() {
-	const [conversations, setConversations] = useState<Conversation[]>([]);
+	const dispatch = useDispatch<AppDisopatch>();
+	const dispatchRef = useRef(dispatch);
 
 	useEffect(() => {
-		const controller = new AbortController();
-		getConversations(controller)
-			.then(({ data }) => setConversations(data))
-			.catch((err) => console.error(err));
-
-		return () => controller.abort();
+		dispatchRef.current?.(fetchConversationsThunk()).catch(console.error);
 	}, []);
 
 	return (
 		<Page>
-			<ConversationSidebar conversations={conversations} />
+			<ConversationSidebar />
 			<Outlet />
 		</Page>
 	);
