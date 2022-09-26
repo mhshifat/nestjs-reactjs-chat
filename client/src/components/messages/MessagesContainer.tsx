@@ -1,5 +1,8 @@
 import { formatRelative } from "date-fns";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { RootState } from "../../store";
 import {
 	DeletedMessageStyle,
 	MessageItemAvatarStyle,
@@ -11,12 +14,12 @@ import {
 } from "../../utils/styles";
 import { Message, User } from "../../utils/types";
 
-interface Props {
-	messages: Message[];
-}
-
-export default function MessagesContainer({ messages }: Props) {
+export default function MessagesContainer() {
+	const { id } = useParams();
 	const { user } = useAuth();
+	const messages = useSelector(
+		(state: RootState) => state.messagesState.messages.get(+id!) || []
+	);
 
 	const renderMessages = () => {
 		return messages.map((message, mIdx, messagesArray) => {

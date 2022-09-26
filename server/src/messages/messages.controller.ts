@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Routes, Services } from 'src/utils/constants';
 import { AuthUser } from 'src/utils/decorators';
-import { Message, User } from 'src/utils/typeorm';
+import { User } from 'src/utils/typeorm';
 import { CreateMessageDto } from './dtos/CreateMessage.dto';
 import { IMessagesService } from './messages.types';
 
@@ -16,10 +16,11 @@ export class MessagesController {
   ) { }
 
   @Get(":conversationId")
-  getMessages(
-    @Param("conversationId") conversationId: number
+  async getMessages(
+    @Param("conversationId", { transform: (value) => +value }) conversationId: number
   ) {
-    return this.messageService.getMessages(conversationId);
+    const messages = await this.messageService.getMessages(conversationId);
+    return { conversationId, messages };
   }
 
   @Post()

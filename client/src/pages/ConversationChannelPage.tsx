@@ -1,25 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MessagesPanel from "../components/messages/MessagesPanel";
-import { getConversationMessages } from "../utils/api";
+import { AppDisopatch, RootState } from "../store";
+import { fetchMessagesThunk } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { CoversationChannelPage } from "../utils/styles";
 import { Message, MessageEventPayload } from "../utils/types";
 
 export default function ConversationChannelPage() {
 	const { id } = useParams();
+	const dispatch = useDispatch<AppDisopatch>();
+	const dispatchRef = useRef(dispatch);
 	const socket = useContext(SocketContext);
 	const socketRef = useRef(socket);
 	const [messages, setMessages] = useState<Message[]>([]);
 
 	useEffect(() => {
 		if (!id) return;
-		const controller = new AbortController();
-		getConversationMessages(+id, controller)
-			.then(({ data }) => setMessages(data))
-			.catch(console.error);
-
-		return () => controller.abort();
+		dispatchRef.current?.(fetchMessagesThunk(+id));
 	}, [id]);
 
 	useEffect(() => {
@@ -40,7 +39,7 @@ export default function ConversationChannelPage() {
 
 	return (
 		<CoversationChannelPage>
-			<MessagesPanel messages={messages} />
+			<MessagesPanel />
 		</CoversationChannelPage>
 	);
 }

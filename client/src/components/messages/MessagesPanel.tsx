@@ -7,11 +7,7 @@ import { FormEvent, useCallback, useState } from "react";
 import { postNewMessage } from "../../utils/api";
 import { useParams } from "react-router-dom";
 
-interface Props {
-	messages: Message[];
-}
-
-export default function MessagesPanel({ messages }: Props) {
+export default function MessagesPanel() {
 	const { id } = useParams();
 	const [message, setMessage] = useState("");
 
@@ -35,7 +31,7 @@ export default function MessagesPanel({ messages }: Props) {
 		<MessagesPanelStyle>
 			<MessagePanelHeader />
 			<MessagesPanelBodyStyle>
-				<MessagesContainer messages={messages} />
+				<MessagesContainer />
 				<MessageInputField
 					message={message}
 					setMessage={setMessage}
