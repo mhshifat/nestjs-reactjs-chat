@@ -17,7 +17,7 @@ export class MessagesService implements IMessagesService {
     return this.messageRepo.findOne({ id });
   }
 
-  getMessages(conversationId: number): Promise<Message[]> {
+  async getMessages(conversationId: number): Promise<Message[]> {
     return this.messageRepo.find({ where: { conversation: conversationId }, order: { createdAt: "DESC" }, relations: ["author"] });
   }
 
@@ -26,9 +26,8 @@ export class MessagesService implements IMessagesService {
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
       .leftJoinAndSelect("conversation.recipient", "recipient")
-      .where({ id: conversationId })
-      .andWhere("creator.id", { id: user.id })
-      .orWhere("recipient.id", { id: user.id })
+      .where("conversation.id = :conversationId", { conversationId })
+      .andWhere("creator.id = :authUserId OR recipient.id = :authUserId", { authUserId: user.id })
       .getOne();
 
     if (!conversation) throw new HttpException("Conversation not found", HttpStatus.BAD_REQUEST);

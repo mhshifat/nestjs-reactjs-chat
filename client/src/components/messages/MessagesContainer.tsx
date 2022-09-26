@@ -31,7 +31,7 @@ export default function MessagesContainer() {
 			} else if (prevMessage?.author.id === message.author.id) {
 				return (
 					<MessageItemContainerStyle key={message.id} padding="0 0 10px">
-						<MessageItemContentStyle padding="0 0 0 65px">
+						<MessageItemContentStyle padding="0 0 0 66px">
 							{message.content || (
 								<DeletedMessageStyle>message deleted</DeletedMessageStyle>
 							)}

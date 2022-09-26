@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MessagesPanel from "../components/messages/MessagesPanel";
 import { AppDisopatch, RootState } from "../store";
-import { fetchMessagesThunk } from "../store/messagesSlice";
+import { addMessage, fetchMessagesThunk } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { CoversationChannelPage } from "../utils/styles";
 import { Message, MessageEventPayload } from "../utils/types";
@@ -14,7 +14,6 @@ export default function ConversationChannelPage() {
 	const dispatchRef = useRef(dispatch);
 	const socket = useContext(SocketContext);
 	const socketRef = useRef(socket);
-	const [messages, setMessages] = useState<Message[]>([]);
 
 	useEffect(() => {
 		if (!id) return;
@@ -28,7 +27,9 @@ export default function ConversationChannelPage() {
 		const onMessageListener = socketRef.current?.on(
 			"onMessage",
 			({ conversation, ...message }: MessageEventPayload) =>
-				setMessages((prevMsgs) => [message, ...prevMsgs])
+				dispatchRef.current?.(
+					addMessage({ conversationId: conversation.id, message })
+				)
 		);
 
 		return () => {

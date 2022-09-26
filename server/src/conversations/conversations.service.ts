@@ -23,8 +23,7 @@ export class ConversationsService implements IConversationsService {
       .createQueryBuilder("conversation")
       .leftJoinAndSelect("conversation.creator", "creator")
       .leftJoinAndSelect("conversation.recipient", "recipient")
-      .where("creator.id", { id })
-      .orWhere("recipient.id", { id })
+      .where("creator.id = :authUserId OR recipient.id = :authUserId", { authUserId: id })
       .getMany();
   }
 
