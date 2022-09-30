@@ -27,9 +27,11 @@ export default function ConversationChannelPage() {
 		const onMessageListener = socketRef.current?.on(
 			"onMessage",
 			({ conversation, ...message }: MessageEventPayload) =>
-				dispatchRef.current?.(
-					addMessage({ conversationId: conversation.id, message })
-				)
+				{
+					dispatchRef.current?.(
+						addMessage({ conversationId: conversation.id, message })
+					);
+				}
 		);
 
 		return () => {

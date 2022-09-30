@@ -1,15 +1,26 @@
+import { Inject } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, OnGatewayConnection } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io"
+import { Services } from "src/utils/constants";
+import { AuthenticatedSocket } from "src/utils/interfaces";
+import { Message } from "src/utils/typeorm";
+import { IGatewaySessionManager } from "./gateway.session";
 
 @WebSocketGateway({
   cors: {
     origin: ["http://localhost:3000"],
+    credentials: true
   }
 })
 export class MessagingGateway implements OnGatewayConnection {
-  handleConnection(client: Socket, ...args: any[]) {
-    client.emit("connected")
+  constructor(
+    @Inject(Services.GATEAWAY_SESSION) private readonly sessionManager: IGatewaySessionManager
+  ) { }
+
+  handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
+    this.sessionManager.setUserSocket(socket.user.id, socket);
+    socket.emit("connected")
   }
 
   @WebSocketServer()
@@ -21,7 +32,13 @@ export class MessagingGateway implements OnGatewayConnection {
   }
 
   @OnEvent("message.create")
-  handleMessageCreateEvent(payload: any) {
-    this.server.emit("onMessage", payload);
+  handleMessageCreateEvent(payload: Message) {
+    const { author, conversation: { recipient, creator } } = payload;
+    this.sessionManager.getUserSocket(author.id)?.emit("onMessage", payload);
+    if (author.id === recipient.id) {
+      this.sessionManager.getUserSocket(creator.id)?.emit("onMessage", payload);
+    } else {
+      this.sessionManager.getUserSocket(recipient.id)?.emit("onMessage", payload);
+    }
   }
 }

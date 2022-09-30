@@ -7,11 +7,14 @@ import * as passport from "passport";
 import { TypeormStore } from "connect-typeorm/out";
 import { Session } from "./utils/typeorm";
 import { getRepository } from "typeorm";
+import { WebsocketAdapter } from "./gateway/gateway.adapter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const sessionRepository = getRepository(Session); 
+  const adapter = new WebsocketAdapter(app); 
   const { PORT } = process.env;
+  app.useWebSocketAdapter(adapter);
   app.setGlobalPrefix("api");
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({ origin: ["http://localhost:3000"], credentials: true });
@@ -20,6 +23,7 @@ async function bootstrap() {
       secret: process.env.COOKIE_SECRET,
       saveUninitialized: false,
       resave: false,
+      name: "CHAT_APP_SESSION_ID",
       cookie: {
         maxAge: 86400000,
       },
