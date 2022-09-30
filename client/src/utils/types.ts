@@ -23,6 +23,7 @@ export type Conversation = {
   recipient: User;
   createdAt: string;
   messages?: Message[];
+  lastMessageSent?: Message;
 }
 
 export type Message = {

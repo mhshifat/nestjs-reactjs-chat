@@ -57,7 +57,7 @@ export default function ConversationSidebar() {
 									}`}
 								</span>
 								<span className={styles.conversationLastMessage}>
-									{"Simple Text"}
+									{conversation?.lastMessageSent?.content}
 								</span>
 							</div>
 						</CoversationsSidebarItem>

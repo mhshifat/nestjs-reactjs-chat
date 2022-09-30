@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MessagesPanel from "../components/messages/MessagesPanel";
 import { AppDisopatch, RootState } from "../store";
+import { updateConversation } from "../store/conversationsSlice";
 import { addMessage, fetchMessagesThunk } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { CoversationChannelPage } from "../utils/styles";
@@ -26,12 +27,14 @@ export default function ConversationChannelPage() {
 		);
 		const onMessageListener = socketRef.current?.on(
 			"onMessage",
-			({ conversation, ...message }: MessageEventPayload) =>
-				{
-					dispatchRef.current?.(
-						addMessage({ conversationId: conversation.id, message })
-					);
-				}
+			({ conversation, ...message }: MessageEventPayload) => {
+				dispatchRef.current?.(
+					updateConversation({ conversationId: conversation.id, message })
+				);
+				dispatchRef.current?.(
+					addMessage({ conversationId: conversation.id, message })
+				);
+			}
 		);
 
 		return () => {
