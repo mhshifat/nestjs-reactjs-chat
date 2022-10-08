@@ -7,7 +7,11 @@ import { FormEvent, useCallback, useState } from "react";
 import { postNewMessage } from "../../utils/api";
 import { useParams } from "react-router-dom";
 
-export default function MessagesPanel() {
+interface Props {
+	sendTypingStatus: () => void;
+}
+
+export default function MessagesPanel({ sendTypingStatus }: Props) {
 	const { id } = useParams();
 	const [message, setMessage] = useState("");
 
@@ -36,6 +40,7 @@ export default function MessagesPanel() {
 					message={message}
 					setMessage={setMessage}
 					sendMessage={sendMessage}
+					sendTypingStatus={sendTypingStatus}
 				/>
 			</MessagesPanelBodyStyle>
 		</MessagesPanelStyle>

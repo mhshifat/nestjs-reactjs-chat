@@ -22,7 +22,7 @@ export type CreateParticipantDetails = {
 }
 
 export type CreateConversationDetails = {
-  recipientId: number;
+  email: string;
   message: string;
 }
 

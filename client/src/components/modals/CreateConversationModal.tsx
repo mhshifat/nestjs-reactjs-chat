@@ -33,6 +33,10 @@ export default function CreateConversationModal({ setShowModal }: Props) {
 		},
 		[]
 	);
+	const handleCloseModal = useCallback(
+		() => handleOverlayRef.current?.setShowModal(false),
+		[]
+	);
 	return (
 		<OverlayStyle ref={ref} onClick={handleOverlayClick}>
 			<ModalContainer>
@@ -41,11 +45,11 @@ export default function CreateConversationModal({ setShowModal }: Props) {
 					<MdClose
 						size={32}
 						cursor="pointer"
-						onClick={() => setShowModal(false)}
+						onClick={handleCloseModal}
 					/>
 				</ModalHeader>
 				<ModalContentBody>
-					<CreateConversationForm />
+					<CreateConversationForm closeModal={handleCloseModal} />
 				</ModalContentBody>
 			</ModalContainer>
 		</OverlayStyle>

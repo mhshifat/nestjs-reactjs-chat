@@ -1,9 +1,9 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateConversationDto {
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  recipientId: number;
+  email: string;
 
   @IsString()
   @IsNotEmpty()

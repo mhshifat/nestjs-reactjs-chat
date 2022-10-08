@@ -44,7 +44,7 @@ export default function ConversationSidebar() {
 					</div>
 				</ConversationSidebarHeader>
 				<CoversationsSidebarContainer>
-					{Array.from(conversations.values()).map((conversation) => (
+					{conversations.map((conversation) => (
 						<CoversationsSidebarItem
 							key={conversation.id}
 							onClick={() => goToSpecifiqConversation(conversation.id)}

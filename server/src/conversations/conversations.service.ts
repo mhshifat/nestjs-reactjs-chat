@@ -30,8 +30,13 @@ export class ConversationsService implements IConversationsService {
   }
 
   async createConversation(user: User, payload: CreateConversationDetails): Promise<Conversation> {
-    const recipient = await this.userService.findUser({ id: payload.recipientId });
+    const recipient = await this.userService.findUser({ email: payload.email });
     if (!recipient) throw new HttpException("Recipient not found!", HttpStatus.BAD_REQUEST);
+    const existingConversation = await this.conversationRepo
+    .createQueryBuilder("conversation")
+    .where("(conversation.creator = :creatorId AND conversation.recipient = :recipientId) OR (conversation.creator = :recipientId AND conversation.recipient = :creatorId)", { creatorId: user.id, recipientId: recipient.id })
+    .getOne();
+    if (existingConversation) throw new HttpException("Conversation already exist!", HttpStatus.BAD_REQUEST);
     const newConversation = this.conversationRepo.create({
       creator: user,
       recipient,

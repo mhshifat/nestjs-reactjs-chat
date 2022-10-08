@@ -2,6 +2,7 @@ import { Inject } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, OnGatewayConnection } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io"
+import { IConversationsService } from "src/conversations/conversations.types";
 import { Services } from "src/utils/constants";
 import { AuthenticatedSocket } from "src/utils/interfaces";
 import { Message } from "src/utils/typeorm";
@@ -15,7 +16,8 @@ import { IGatewaySessionManager } from "./gateway.session";
 })
 export class MessagingGateway implements OnGatewayConnection {
   constructor(
-    @Inject(Services.GATEAWAY_SESSION) private readonly sessionManager: IGatewaySessionManager
+    @Inject(Services.GATEAWAY_SESSION) private readonly sessionManager: IGatewaySessionManager,
+    @Inject(Services.CONVERSATIONS) private readonly conversationsService: IConversationsService
   ) { }
 
   handleConnection(socket: AuthenticatedSocket, ...args: any[]) {
@@ -28,7 +30,12 @@ export class MessagingGateway implements OnGatewayConnection {
 
   @SubscribeMessage("createMessage")
   handleCreateMessage(@MessageBody() data: any) {
-    console.log({ data });
+    // console.log({ data });
+  }
+
+  @SubscribeMessage("onUserTyping")
+  async handleOnUserTyping(@MessageBody() data: { conversationId: number }) {
+    // console.log({ data });
   }
 
   @OnEvent("message.create")

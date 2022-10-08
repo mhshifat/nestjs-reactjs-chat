@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import MessagesPanel from "../components/messages/MessagesPanel";
@@ -22,7 +22,7 @@ export default function ConversationChannelPage() {
 	}, [id]);
 
 	useEffect(() => {
-		const connectListener = socketRef.current?.on("connected", () =>
+    const connectListener = socketRef.current?.on("connected", () =>
 			console.log("Connected")
 		);
 		const onMessageListener = socketRef.current?.on(
@@ -43,9 +43,13 @@ export default function ConversationChannelPage() {
 		};
 	}, []);
 
+	const sendTypingStatus = useCallback(() => {
+		socketRef.current?.emit("onUserTyping", { conversationId: id });
+	}, [id]);
+
 	return (
 		<CoversationChannelPage>
-			<MessagesPanel />
+			<MessagesPanel sendTypingStatus={sendTypingStatus} />
 		</CoversationChannelPage>
 	);
 }

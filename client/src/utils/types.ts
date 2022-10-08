@@ -46,6 +46,11 @@ export type CreateMessageParams = {
   conversationId: number;
 }
 
+export type CreateConversationParams = {
+  email: string;
+  message: string;
+}
+
 export type GetMessagesResponse = {
   conversationId: number;
   messages: Message[]

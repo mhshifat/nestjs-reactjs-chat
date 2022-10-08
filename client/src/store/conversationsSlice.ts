@@ -1,46 +1,48 @@
-import { Conversation, Message } from "../utils/types";
+import { Conversation, CreateConversationParams, Message } from "../utils/types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getConversationMessages, getConversations } from "../utils/api";
+import { getConversations, postNewConversation } from "../utils/api";
 
 export interface ConversationsState {
-  conversations: Map<number, Conversation>;
+  conversations: Conversation[];
   loading: boolean,
 }
 
 const initialState: ConversationsState = {
-  conversations: new Map(),
+  conversations: [],
   loading: true,
 }
 
 export const fetchConversationsThunk = createAsyncThunk("conversations/fetch", async () => {
   return await getConversations()
 })
+export const createConversationThunk = createAsyncThunk("conversations/create", async (data: CreateConversationParams) => {
+  return await postNewConversation(data)
+})
 export const conversationsSlice = createSlice({
   name: "converations",
   initialState,
   reducers: {
     addConversation: (state, action: PayloadAction<Conversation>) => {
-      state.conversations.set(action.payload.id, action.payload);
+      state.conversations.unshift(action.payload);
     },
     updateConversation: (state, action: PayloadAction<{ conversationId: number, message: Message }>) => {
       const { conversationId, message } = action.payload;
-      const conversation = state.conversations.get(conversationId);
+      const conversationIdx = state.conversations.findIndex(c => c.id === conversationId);
+      const conversation = state.conversations[conversationIdx];
       if (conversation) conversation.lastMessageSent = message;
-      state.conversations.delete(conversationId);
-      const conversations = Array.from(state.conversations.values());
-      const newConversationsMap = new Map();
-      newConversationsMap.set(conversationId, conversation);
-      conversations.forEach(con => newConversationsMap.set(con.id, con));
-      state.conversations = newConversationsMap;
+      state.conversations.splice(conversationIdx, 1);
+      state.conversations.unshift(conversation);
     }
   },
   extraReducers: (builder) =>
     builder
       .addCase(fetchConversationsThunk.fulfilled, (state, action) => {
-        action.payload.data.forEach(conversation => state.conversations.set(conversation.id, conversation));
+        state.conversations = action.payload.data;
         state.loading = false;
       }).addCase(fetchConversationsThunk.rejected, (state) => {
         state.loading = false;
+      }).addCase(createConversationThunk.fulfilled, (state, action) => {
+        state.conversations.unshift(action.payload.data);
       }),
 });
 
