@@ -5,7 +5,7 @@ import { Server, Socket } from "socket.io"
 import { IConversationsService } from "src/conversations/conversations.types";
 import { Services } from "src/utils/constants";
 import { AuthenticatedSocket } from "src/utils/interfaces";
-import { Message } from "src/utils/typeorm";
+import { Conversation, Message } from "src/utils/typeorm";
 import { IGatewaySessionManager } from "./gateway.session";
 
 @WebSocketGateway({
@@ -47,5 +47,10 @@ export class MessagingGateway implements OnGatewayConnection {
     } else {
       this.sessionManager.getUserSocket(recipient.id)?.emit("onMessage", payload);
     }
+  }
+
+  @OnEvent("conversations.create")
+  handleConversationCreateEvent(payload: Conversation) {
+    this.sessionManager.getUserSocket(payload.recipient.id)?.emit("onConversation", payload);
   }
 }

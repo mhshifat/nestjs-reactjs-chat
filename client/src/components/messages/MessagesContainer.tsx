@@ -9,6 +9,7 @@ import {
 	MessageItemContainerStyle,
 	MessageItemContentStyle,
 	MessageItemDetailsStyle,
+	MessageItemHeaderNameStyle,
 	MessageItemHeaderStyle,
 	MessagesContainerStyle,
 } from "../../utils/styles";
@@ -61,11 +62,11 @@ function RenderWholeMessage({
 			<MessageItemAvatarStyle />
 			<MessageItemDetailsStyle>
 				<MessageItemHeaderStyle>
-					<span className="name">
+					<MessageItemHeaderNameStyle color={user?.id === author.id ? "#ccc" : "#6464f9"}>
 						{user?.id === author.id
 							? "You"
 							: `${author.firstName} ${author.lastName}`}
-					</span>
+					</MessageItemHeaderNameStyle>
 					<span className="time">
 						{formatRelative(new Date(createdAt), new Date())}
 					</span>

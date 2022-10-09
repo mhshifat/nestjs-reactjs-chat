@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Services } from 'src/utils/constants';
 import { AuthUser } from 'src/utils/decorators';
@@ -11,11 +12,14 @@ import { CreateConversationDto } from './dtos/CreateConversation.dto';
 export class ConversationsController {
   constructor(
     @Inject(Services.CONVERSATIONS) private readonly coversationService: IConversationsService,
+    private readonly eventEmmiter: EventEmitter2,
   ) { }
 
   @Post()
   async createConversation(@AuthUser() user: User, @Body() dto: CreateConversationDto) {
-    return this.coversationService.createConversation(user, dto)
+    const conversation = await this.coversationService.createConversation(user, dto);
+    this.eventEmmiter.emit("conversations.create", conversation);
+    return conversation;
   }
 
   @Get()

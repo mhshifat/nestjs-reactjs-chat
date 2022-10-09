@@ -3,11 +3,11 @@ import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 import ConversationSidebar from "../components/conversations/ConversationSidebar";
 import { AppDisopatch } from "../store";
-import { fetchConversationsThunk, updateConversation } from "../store/conversationsSlice";
+import { addConversation, fetchConversationsThunk, updateConversation } from "../store/conversationsSlice";
 import { addMessage } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { Page } from "../utils/styles";
-import { MessageEventPayload } from "../utils/types";
+import { Conversation, MessageEventPayload } from "../utils/types";
 
 export default function ConversationPage() {
 	const dispatch = useDispatch<AppDisopatch>();
@@ -34,10 +34,19 @@ export default function ConversationPage() {
 				);
 			}
 		);
+		const onConversationListener = socketRef.current?.on(
+			"onConversation",
+			(payload: Conversation) => {
+				dispatchRef.current?.(
+					addConversation(payload)
+				);
+			}
+		);
 
 		return () => {
 			connectListener.off("connected");
 			onMessageListener.off("onMessage");
+			onConversationListener.off("onConversation");
 		};
 	}, []);
 

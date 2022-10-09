@@ -11,3 +11,7 @@ export type InputContainerProps = Partial<{
 export type MessageItemContentProps = Partial<{
   padding: string;
 }>
+
+export type MessageItemHeaderNameProps = Partial<{
+  color: string;
+}>

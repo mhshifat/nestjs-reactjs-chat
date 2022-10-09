@@ -2,6 +2,7 @@ import styled, { css } from "styled-components";
 import {
 	InputContainerProps,
 	MessageItemContentProps,
+	MessageItemHeaderNameProps,
 	PageProps,
 } from "./styleTypes";
 
@@ -254,12 +255,6 @@ export const MessageItemHeaderStyle = styled.div`
 	align-items: flex-end;
 	gap: 12px;
 
-	& .name {
-		font-weight: 600;
-		font-size: 16px;
-		margin-top: 5px;
-	}
-
 	& .time {
 		color: #6d6d6d;
 		font-size: 12px;
@@ -268,11 +263,19 @@ export const MessageItemHeaderStyle = styled.div`
 	}
 `;
 
+export const MessageItemHeaderNameStyle = styled.span<MessageItemHeaderNameProps>`
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 5px;
+  color: ${({ color }) => color || "#ccc"};
+`;
+
 export const MessageItemContentStyle = styled.div<MessageItemContentProps>`
 	padding: ${({ padding }) => padding};
 	font-size: 14px;
 	line-height: 22px;
 	font-weight: 400;
+  word-break: break-all;
 `;
 
 export const MessagePanelHeaderStyle = styled.header`
