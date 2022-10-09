@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import {
 	InputContainerProps,
+	MessageContextMenuProps,
 	MessageItemContentProps,
 	MessageItemHeaderNameProps,
 	PageProps,
@@ -249,7 +250,10 @@ export const MessageItemAvatarStyle = styled.div`
 	flex-shrink: 0;
 `;
 
-export const MessageItemDetailsStyle = styled.div``;
+export const MessageItemDetailsStyle = styled.div`
+  flex: 1;
+`;
+
 export const MessageItemHeaderStyle = styled.div`
 	display: flex;
 	align-items: flex-end;
@@ -297,4 +301,33 @@ export const MessagePanelHeaderStyle = styled.header`
 export const DeletedMessageStyle = styled.span`
 	color: #6d6d6d;
 	font-style: italic;
+`;
+
+export const MessageContextMenuStyle = styled.div<MessageContextMenuProps>`
+	position: fixed;
+  width: 200px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background: #252525;
+
+  ${({ top, left }) => css`
+    top: ${top}px;
+    left: ${left}px;
+  `}
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      padding: 10px 15px;
+      font-size: 14px;
+
+      &:hover {
+        cursor: pointer;
+        background: #1f1f1f;
+      }
+    }
+  }
 `;

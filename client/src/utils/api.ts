@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, GetMessagesResponse, UserCredentialsParams } from './types';
+import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, DeleteMessageParams, GetMessagesResponse, Message, UserCredentialsParams } from './types';
 
 const config: AxiosRequestConfig = {
   withCredentials: true,
@@ -12,3 +12,4 @@ export const getConversations = async (controller?: AbortController) => axios.ge
 export const getConversationMessages = async (conversationId: number, controller?: AbortController) => axios.get<GetMessagesResponse>(`${process.env.REACT_APP_API_URL}/messages/${conversationId}`, { ...config, signal: controller?.signal });
 export const postNewMessage = async (data: CreateMessageParams) => axios.post(`${process.env.REACT_APP_API_URL}/messages`, data, config);
 export const postNewConversation = async (data: CreateConversationParams) => axios.post<Conversation>(`${process.env.REACT_APP_API_URL}/conversations`, data, config);
+export const deleteMessage = async ({ messageId, conversationId }: DeleteMessageParams) => axios.delete<Message>(`${process.env.REACT_APP_API_URL}/messages/${messageId}`, {...config, params: { conversation: conversationId }});

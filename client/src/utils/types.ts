@@ -31,6 +31,7 @@ export type Message = {
   content: string;
   createdAt: string;
   author: User;
+  conversation?: Conversation;
 }
 
 export type MessageEventPayload = {
@@ -49,6 +50,11 @@ export type CreateMessageParams = {
 export type CreateConversationParams = {
   email: string;
   message: string;
+}
+
+export type DeleteMessageParams = {
+  messageId: number;
+  conversationId: number;
 }
 
 export type GetMessagesResponse = {

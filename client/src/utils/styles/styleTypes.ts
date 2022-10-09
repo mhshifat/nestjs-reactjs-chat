@@ -15,3 +15,8 @@ export type MessageItemContentProps = Partial<{
 export type MessageItemHeaderNameProps = Partial<{
   color: string;
 }>
+
+export type MessageContextMenuProps = Partial<{
+  top: number;
+  left: number;
+}>

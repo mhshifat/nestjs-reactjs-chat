@@ -1,6 +1,6 @@
-import { Message } from "../utils/types";
-import { createAsyncThunk, createSlice, current, PayloadAction } from "@reduxjs/toolkit";
-import { getConversationMessages } from "../utils/api";
+import { DeleteMessageParams, Message } from "../utils/types";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { deleteMessage, getConversationMessages } from "../utils/api";
 
 export interface MessagesState {
   messages: Map<number, Message[]>;
@@ -14,6 +14,9 @@ const initialState: MessagesState = {
 
 export const fetchMessagesThunk = createAsyncThunk("messages/fetch", async (id: number) => {
   return await getConversationMessages(id)
+})
+export const deleteMessageThunk = createAsyncThunk("messages/delete", async (data: DeleteMessageParams) => {
+  return await deleteMessage(data)
 })
 export const messagesSlice = createSlice({
   name: "messages",
@@ -32,6 +35,10 @@ export const messagesSlice = createSlice({
         state.loading = false;
       }).addCase(fetchMessagesThunk.rejected, (state) => {
         state.loading = false;
+      }).addCase(deleteMessageThunk.fulfilled, (state, action) => {
+        const conversation = action.payload.data.conversation;
+        if (!conversation) return;
+        state.messages.set(conversation.id, state.messages.get(conversation.id)?.filter(msg => msg.id !== action.payload.data.id) || []);
       }),
 });
 

@@ -46,7 +46,7 @@ export class MessagesService implements IMessagesService {
   }
 
   async deleteMessage(user: User, { messageId, conversationId }: DeleteMessageDetails): Promise<Message> {
-    const message = await this.messageRepo.findOne({ where: { id: messageId, author: user.id, conversation: conversationId } });
+    const message = await this.messageRepo.findOne({ where: { id: messageId, author: user.id, conversation: conversationId }, relations: ["conversation"] });
     if (!message) throw new HttpException("Cannot delete message", HttpStatus.BAD_REQUEST);
     const conversation = await this.conversationRepo
     .createQueryBuilder("conversation")
