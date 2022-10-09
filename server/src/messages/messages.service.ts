@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain } from 'class-transformer';
 import { Conversation, Message, User } from 'src/utils/typeorm';
-import { CreateMessageDetails } from 'src/utils/types';
+import { CreateMessageDetails, DeleteMessageDetails } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import { IMessagesService } from './messages.types';
 
@@ -43,5 +43,30 @@ export class MessagesService implements IMessagesService {
     conversation.lastMessageSent = savedMessage;
     await this.conversationRepo.save(conversation);
     return savedMessage;
+  }
+
+  async deleteMessage(user: User, { messageId, conversationId }: DeleteMessageDetails): Promise<Message> {
+    const message = await this.messageRepo.findOne({ where: { id: messageId, author: user.id, conversation: conversationId } });
+    if (!message) throw new HttpException("Cannot delete message", HttpStatus.BAD_REQUEST);
+    const conversation = await this.conversationRepo
+    .createQueryBuilder("conversation")
+    .where("conversation.id = :conversationId", { conversationId })
+    .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
+    .leftJoinAndSelect("conversation.messages", "messages")
+    .orderBy("messages.createdAt", "DESC")
+    .limit(2)
+    .getOne();
+    if (!conversation) throw new HttpException("Cannot delete message", HttpStatus.BAD_REQUEST);
+    if (conversation.lastMessageSent.id === messageId && conversation.messages.length) {
+      const lastMessageSent = conversation.messages.reverse()[0];
+      await this.conversationRepo
+        .createQueryBuilder()
+        .update("conversations")
+        .set({ lastMessageSent: conversation.messages.length > 1 ? lastMessageSent : null })
+        .where("id = :conversationId", { conversationId })
+        .execute();
+    }
+    await this.messageRepo.delete({ id: messageId });
+    return message;
   }
 }

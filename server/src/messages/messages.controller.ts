@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Routes, Services } from 'src/utils/constants';
@@ -31,5 +31,14 @@ export class MessagesController {
     const savedMessage = await this.messageService.createMessage(user, dto);
     this.eventEmmiter.emit("message.create", savedMessage)
     return;
+  }
+
+  @Delete(":messageId")
+  async deleteMessage(
+    @AuthUser() user: User,
+    @Param("messageId", ParseIntPipe) messageId: number,
+    @Query("conversation", ParseIntPipe) conversationId: number
+  ) {
+    return this.messageService.deleteMessage(user, { conversationId, messageId });
   }
 }

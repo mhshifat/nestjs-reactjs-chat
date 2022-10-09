@@ -31,7 +31,7 @@ export default function MessagesContainer() {
 				);
 			} else if (prevMessage?.author.id === message.author.id) {
 				return (
-					<MessageItemContainerStyle key={message.id} padding="0 0 10px">
+					<MessageItemContainerStyle key={message.id} padding="0 0 5px">
 						<MessageItemContentStyle padding="0 0 0 66px">
 							{message.content || (
 								<DeletedMessageStyle>message deleted</DeletedMessageStyle>
@@ -58,20 +58,18 @@ function RenderWholeMessage({
 }) {
 	const { id, content, author, createdAt } = message;
 	return (
-		<MessageItemContainerStyle key={id} padding="10px 0 0 0">
+		<MessageItemContainerStyle key={id} padding="2px 0 0 0">
 			<MessageItemAvatarStyle />
 			<MessageItemDetailsStyle>
 				<MessageItemHeaderStyle>
 					<MessageItemHeaderNameStyle color={user?.id === author.id ? "#ccc" : "#6464f9"}>
-						{user?.id === author.id
-							? "You"
-							: `${author.firstName} ${author.lastName}`}
+						{`${author.firstName} ${author.lastName}`}
 					</MessageItemHeaderNameStyle>
 					<span className="time">
 						{formatRelative(new Date(createdAt), new Date())}
 					</span>
 				</MessageItemHeaderStyle>
-				<MessageItemContentStyle padding="5px 0 10px 0">
+				<MessageItemContentStyle padding="5px 0 5px 0">
 					{content || (
 						<DeletedMessageStyle>message deleted</DeletedMessageStyle>
 					)}

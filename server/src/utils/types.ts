@@ -38,3 +38,8 @@ export type CreateMessageDetails = {
   conversationId: number;
   content: string;
 }
+
+export type DeleteMessageDetails = {
+  conversationId: number;
+  messageId: number;
+}
