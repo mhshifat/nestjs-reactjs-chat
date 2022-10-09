@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import {
 	Button,
@@ -12,11 +12,14 @@ import { postRegisterUser } from "../../utils/api";
 import { CreateUserParams } from "../../utils/types";
 
 export default function RegisterForm() {
+  const navigate = useNavigate();
 	const { handleSubmit, register } = useForm<CreateUserParams>();
+  const functionsRefs = useRef({ navigate });
 
 	const handleRegister = useCallback(async (formValues: CreateUserParams) => {
 		try {
 			await postRegisterUser(formValues);
+      functionsRefs.current?.navigate("/login");
 		} catch (err) {
 			console.error(err);
 		}

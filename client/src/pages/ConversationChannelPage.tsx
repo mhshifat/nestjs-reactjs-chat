@@ -1,13 +1,13 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useCallback, useContext, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import MessagesPanel from "../components/messages/MessagesPanel";
-import { AppDisopatch, RootState } from "../store";
+import { AppDisopatch } from "../store";
 import { updateConversation } from "../store/conversationsSlice";
 import { addMessage, fetchMessagesThunk } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { CoversationChannelPage } from "../utils/styles";
-import { Message, MessageEventPayload } from "../utils/types";
+import { MessageEventPayload } from "../utils/types";
 
 export default function ConversationChannelPage() {
 	const { id } = useParams();
@@ -20,28 +20,6 @@ export default function ConversationChannelPage() {
 		if (!id) return;
 		dispatchRef.current?.(fetchMessagesThunk(+id));
 	}, [id]);
-
-	useEffect(() => {
-    const connectListener = socketRef.current?.on("connected", () =>
-			console.log("Connected")
-		);
-		const onMessageListener = socketRef.current?.on(
-			"onMessage",
-			({ conversation, ...message }: MessageEventPayload) => {
-				dispatchRef.current?.(
-					updateConversation({ conversationId: conversation.id, message })
-				);
-				dispatchRef.current?.(
-					addMessage({ conversationId: conversation.id, message })
-				);
-			}
-		);
-
-		return () => {
-			connectListener.off("connected");
-			onMessageListener.off("onMessage");
-		};
-	}, []);
 
 	const sendTypingStatus = useCallback(() => {
 		socketRef.current?.emit("onUserTyping", { conversationId: id });
