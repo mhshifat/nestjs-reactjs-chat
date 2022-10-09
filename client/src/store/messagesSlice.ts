@@ -1,4 +1,4 @@
-import { DeleteMessageParams, Message } from "../utils/types";
+import { Conversation, DeleteMessageParams, Message } from "../utils/types";
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { deleteMessage, getConversationMessages } from "../utils/api";
 
@@ -25,7 +25,12 @@ export const messagesSlice = createSlice({
     addMessage: (state, action: PayloadAction<{ conversationId: number, message: Message }>) => {
       const { conversationId, message } = action.payload;
       state.messages.get(conversationId)?.unshift(message);
-    }
+    },
+    removeMessage: (state, action: PayloadAction<{ conversation: Conversation, message: Message }>) => {
+      const conversation = action.payload.conversation;
+      if (!conversation) return;
+      state.messages.set(conversation.id, state.messages.get(conversation.id)?.filter(msg => msg.id !== action.payload.message.id) || []);
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -35,12 +40,8 @@ export const messagesSlice = createSlice({
         state.loading = false;
       }).addCase(fetchMessagesThunk.rejected, (state) => {
         state.loading = false;
-      }).addCase(deleteMessageThunk.fulfilled, (state, action) => {
-        const conversation = action.payload.data.conversation;
-        if (!conversation) return;
-        state.messages.set(conversation.id, state.messages.get(conversation.id)?.filter(msg => msg.id !== action.payload.data.id) || []);
-      }),
+      })
 });
 
-export const { addMessage } = messagesSlice.actions;
+export const { addMessage, removeMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

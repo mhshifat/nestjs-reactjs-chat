@@ -45,12 +45,14 @@ export class MessagesService implements IMessagesService {
     return savedMessage;
   }
 
-  async deleteMessage(user: User, { messageId, conversationId }: DeleteMessageDetails): Promise<Message> {
-    const message = await this.messageRepo.findOne({ where: { id: messageId, author: user.id, conversation: conversationId }, relations: ["conversation"] });
+  async deleteMessage(user: User, { messageId, conversationId }: DeleteMessageDetails): Promise<{ message: Message, conversation: Conversation }> {
+    const message = await this.messageRepo.findOne({ where: { id: messageId, author: user.id, conversation: conversationId }, relations: ["conversation", "author"] });
     if (!message) throw new HttpException("Cannot delete message", HttpStatus.BAD_REQUEST);
     const conversation = await this.conversationRepo
     .createQueryBuilder("conversation")
     .where("conversation.id = :conversationId", { conversationId })
+    .leftJoinAndSelect("conversation.creator", "creator")
+    .leftJoinAndSelect("conversation.recipient", "recipient")
     .leftJoinAndSelect("conversation.lastMessageSent", "lastMessageSent")
     .leftJoinAndSelect("conversation.messages", "messages")
     .orderBy("messages.createdAt", "DESC")
@@ -65,8 +67,9 @@ export class MessagesService implements IMessagesService {
         .set({ lastMessageSent: conversation.messages.length > 1 ? lastMessageSent : null })
         .where("id = :conversationId", { conversationId })
         .execute();
+      conversation.lastMessageSent = conversation.messages.length > 1 ? lastMessageSent : null;
     }
     await this.messageRepo.delete({ id: messageId });
-    return message;
+    return { message, conversation };
   }
 }

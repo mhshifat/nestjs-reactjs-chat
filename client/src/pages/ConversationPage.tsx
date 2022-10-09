@@ -4,10 +4,10 @@ import { Outlet } from "react-router-dom";
 import ConversationSidebar from "../components/conversations/ConversationSidebar";
 import { AppDisopatch } from "../store";
 import { addConversation, fetchConversationsThunk, updateConversation } from "../store/conversationsSlice";
-import { addMessage } from "../store/messagesSlice";
+import { addMessage, removeMessage } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { Page } from "../utils/styles";
-import { Conversation, MessageEventPayload } from "../utils/types";
+import { Conversation, Message, MessageEventPayload } from "../utils/types";
 
 export default function ConversationPage() {
 	const dispatch = useDispatch<AppDisopatch>();
@@ -42,11 +42,23 @@ export default function ConversationPage() {
 				);
 			}
 		);
+		const onMessageDeleteListener = socketRef.current?.on(
+			"onMessageDelete",
+			(payload: { message: Message, conversation: Conversation }) => {
+				dispatchRef.current?.(
+					removeMessage(payload)
+				);
+				dispatchRef.current?.(
+					updateConversation({ conversationId: payload.conversation.id, message: payload.conversation.lastMessageSent! })
+				);
+			}
+		);
 
 		return () => {
 			connectListener.off("connected");
 			onMessageListener.off("onMessage");
 			onConversationListener.off("onConversation");
+			onMessageDeleteListener.off("onMessageDelete");
 		};
 	}, []);
 

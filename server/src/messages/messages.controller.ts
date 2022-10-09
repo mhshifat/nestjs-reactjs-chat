@@ -39,6 +39,8 @@ export class MessagesController {
     @Param("messageId", ParseIntPipe) messageId: number,
     @Query("conversation", ParseIntPipe) conversationId: number
   ) {
-    return this.messageService.deleteMessage(user, { conversationId, messageId });
+    const { message, conversation } = await this.messageService.deleteMessage(user, { conversationId, messageId });
+    this.eventEmmiter.emit("message.delete", { message, conversation });
+    return message;
   }
 }
