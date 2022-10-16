@@ -1,6 +1,6 @@
-import { Inject } from "@nestjs/common";
+import { Inject, ParseIntPipe } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, OnGatewayConnection } from "@nestjs/websockets";
+import { WebSocketGateway, WebSocketServer, SubscribeMessage, MessageBody, OnGatewayConnection, ConnectedSocket } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io"
 import { IConversationsService } from "src/conversations/conversations.types";
 import { Services } from "src/utils/constants";
@@ -28,14 +28,38 @@ export class MessagingGateway implements OnGatewayConnection {
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage("createMessage")
-  handleCreateMessage(@MessageBody() data: any) {
-    // console.log({ data });
+  @SubscribeMessage("onConversationJoin")
+  handleConversationJoin(
+    @MessageBody("conversationId", ParseIntPipe) conversationId: number,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    client.join(String(conversationId));
+    client.to(String(conversationId)).emit("userJoin");
+  }
+
+  @SubscribeMessage("onConversationLeave")
+  handleConversationLeave(
+    @MessageBody("conversationId", ParseIntPipe) conversationId: number,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    client.leave(String(conversationId));
+    client.to(String(conversationId)).emit("userLeave");
   }
 
   @SubscribeMessage("onUserTyping")
-  async handleOnUserTyping(@MessageBody() data: { conversationId: number }) {
-    // console.log({ data });
+  handleUserTyping(
+    @MessageBody("conversationId", ParseIntPipe) conversationId: number,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    client.to(String(conversationId)).emit("onUserTyping");
+  }
+
+  @SubscribeMessage("onUserStopedTyping")
+  handleUserStopedTyping(
+    @MessageBody("conversationId", ParseIntPipe) conversationId: number,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    client.to(String(conversationId)).emit("onUserStopedTyping");
   }
 
   @OnEvent("message.create")

@@ -197,7 +197,7 @@ export const MessagesPanelBodyStyle = styled.div`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	padding: 24px;
+	padding: 30px 30px 0;
 	box-sizing: border-box;
 	padding-top: 65px;
 `;
@@ -330,4 +330,15 @@ export const MessageContextMenuStyle = styled.div<MessageContextMenuProps>`
       }
     }
   }
+`;
+
+export const MessageTypingStatusStyle = styled.div`
+	width: 100%;
+  font-size: 12px;
+  font-style: italic;
+  color: #a2a2a2;
+  box-sizing: border-box;
+  height: 30px;
+  display: flex;
+  align-items: center;
 `;
