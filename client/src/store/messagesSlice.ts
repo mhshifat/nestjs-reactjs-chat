@@ -1,6 +1,6 @@
-import { Conversation, DeleteMessageParams, Message } from "../utils/types";
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deleteMessage, getConversationMessages } from "../utils/api";
+import { Conversation, DeleteMessageParams, Message, UpdateMessageParams } from "../utils/types";
+import { createAsyncThunk, createSlice, PayloadAction, current } from "@reduxjs/toolkit";
+import { deleteMessage, getConversationMessages, updateMessage } from "../utils/api";
 
 export interface MessagesState {
   messages: Map<number, Message[]>;
@@ -18,6 +18,9 @@ export const fetchMessagesThunk = createAsyncThunk("messages/fetch", async (id: 
 export const deleteMessageThunk = createAsyncThunk("messages/delete", async (data: DeleteMessageParams) => {
   return await deleteMessage(data)
 })
+export const updateMessageThunk = createAsyncThunk("messages/update", async (data: UpdateMessageParams) => {
+  return await updateMessage(data)
+})
 export const messagesSlice = createSlice({
   name: "messages",
   initialState,
@@ -31,6 +34,10 @@ export const messagesSlice = createSlice({
       if (!conversation) return;
       state.messages.set(conversation.id, state.messages.get(conversation.id)?.filter(msg => msg.id !== action.payload.message.id) || []);
     },
+    modifyMessage: (state, action: PayloadAction<Message>) => {
+      const { conversation, ...rest } = action.payload;
+      state.messages.set(conversation!.id, Array.from(current(state.messages.get(conversation!.id))?.map(message => message.id === rest.id ? rest : message) || []));
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -43,5 +50,5 @@ export const messagesSlice = createSlice({
       })
 });
 
-export const { addMessage, removeMessage } = messagesSlice.actions;
+export const { addMessage, removeMessage, modifyMessage } = messagesSlice.actions;
 export default messagesSlice.reducer;

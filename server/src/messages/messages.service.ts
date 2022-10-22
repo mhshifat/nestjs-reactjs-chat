@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { instanceToPlain } from 'class-transformer';
 import { Conversation, Message, User } from 'src/utils/typeorm';
-import { CreateMessageDetails, DeleteMessageDetails } from 'src/utils/types';
+import { CreateMessageDetails, DeleteMessageDetails, PatchMessagePayload } from 'src/utils/types';
 import { Repository } from 'typeorm';
 import { IMessagesService } from './messages.types';
 
@@ -71,5 +71,29 @@ export class MessagesService implements IMessagesService {
     }
     await this.messageRepo.delete({ id: messageId });
     return { message, conversation };
+  }
+
+  async updateMessage(user: User, messageId: Message["id"], { key, value }: PatchMessagePayload): Promise<{ message: Message, conversation: Conversation }> {
+    const message = await this.messageRepo.findOne({
+      where: {
+        id: messageId,
+        author: { id: user.id }
+      },
+      relations: [
+        "conversation",
+        "conversation.creator",
+        "conversation.recipient",
+        "author"
+      ]
+    });
+    if (!message) throw new HttpException("Message not found", HttpStatus.NOT_FOUND);
+    await this.messageRepo
+      .createQueryBuilder()
+      .update("messages")
+      .where("id = :messageId", { messageId })
+      .set({ [key]: value })
+      .execute();
+    message[key] = value as never;
+    return { message, conversation: message.conversation };
   }
 }

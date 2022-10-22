@@ -57,6 +57,14 @@ export type DeleteMessageParams = {
   conversationId: number;
 }
 
+export type UpdateMessageParams = {
+  messageId: number;
+  payload: {
+    key: keyof Message;
+    value: Message[keyof Message];
+  };
+}
+
 export type GetMessagesResponse = {
   conversationId: number;
   messages: Message[]

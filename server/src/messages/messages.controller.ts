@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Patch, Param, ParseIntPipe, Post, Query, UseGuards } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Routes, Services } from 'src/utils/constants';
 import { AuthUser } from 'src/utils/decorators';
-import { User } from 'src/utils/typeorm';
+import { Message, User } from 'src/utils/typeorm';
 import { CreateMessageDto } from './dtos/CreateMessage.dto';
 import { IMessagesService } from './messages.types';
 
@@ -41,6 +41,18 @@ export class MessagesController {
   ) {
     const { message, conversation } = await this.messageService.deleteMessage(user, { conversationId, messageId });
     this.eventEmmiter.emit("message.delete", { message, conversation });
+    return message;
+  }
+
+  @Patch(":messageId")
+  async updateMessage(
+    @AuthUser() user: User,
+    @Param("messageId", ParseIntPipe) messageId: number,
+    @Body("key") key: keyof Message,
+    @Body("value") value: Message[keyof Message],
+  ) {
+    const { message, conversation } = await this.messageService.updateMessage(user, messageId, { key, value });
+    this.eventEmmiter.emit("message.update", { message, conversation });
     return message;
   }
 }

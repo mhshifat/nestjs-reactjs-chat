@@ -87,4 +87,14 @@ export class MessagingGateway implements OnGatewayConnection {
       this.sessionManager.getUserSocket(conversation.recipient.id)?.emit("onMessageDelete", { message, conversation });
     }
   }
+
+  @OnEvent("message.update")
+  handleMessageUpdateEvent({ message, conversation }: { message: Message, conversation: Conversation }) {
+    this.sessionManager.getUserSocket(message.author.id)?.emit("onMessageUpdate", { message, conversation });
+    if (message.author.id === conversation.recipient.id) {
+      this.sessionManager.getUserSocket(conversation.creator.id)?.emit("onMessageUpdate", { message, conversation });
+    } else {
+      this.sessionManager.getUserSocket(conversation.recipient.id)?.emit("onMessageUpdate", { message, conversation });
+    }
+  }
 }

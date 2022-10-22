@@ -280,6 +280,7 @@ export const MessageItemContentStyle = styled.div<MessageItemContentProps>`
 	line-height: 22px;
 	font-weight: 400;
   word-break: break-all;
+  width: 100%;
 `;
 
 export const MessagePanelHeaderStyle = styled.header`
@@ -341,4 +342,30 @@ export const MessageTypingStatusStyle = styled.div`
   height: 30px;
   display: flex;
   align-items: center;
+`;
+
+export const EditMessageInputStyle = styled.input`
+	outline: none;
+	border: none;
+  color: #bababa;
+  font-family: "Inter";
+  box-sizing: border-box;
+  font-size: 15px;
+  padding: 18px 22px;
+  border-radius: 5px;
+  margin: 4px 0;
+  width: 100%;
+  background: #222222;
+`;
+
+export const EditMessageActionInfoStyle = styled.div`
+  color: #ccc;
+  font-size: 12px;
+  font-style: italic;
+
+	& > span {
+    color: #0066ff;
+    font-weight: bold;
+    font-style: normal;
+  }
 `;

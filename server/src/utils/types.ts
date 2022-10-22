@@ -1,4 +1,4 @@
-import { User } from "./typeorm";
+import { Message, User } from "./typeorm";
 
 export type CreateUserDetails = {
   email: string;
@@ -42,4 +42,9 @@ export type CreateMessageDetails = {
 export type DeleteMessageDetails = {
   conversationId: number;
   messageId: number;
+}
+
+export type PatchMessagePayload = {
+  key: keyof Message;
+  value: Message[keyof Message];
 }

@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, DeleteMessageParams, GetMessagesResponse, Message, UserCredentialsParams } from './types';
+import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, DeleteMessageParams, GetMessagesResponse, Message, UpdateMessageParams, UserCredentialsParams } from './types';
 
 const config: AxiosRequestConfig = {
   withCredentials: true,
@@ -13,3 +13,4 @@ export const getConversationMessages = async (conversationId: number, controller
 export const postNewMessage = async (data: CreateMessageParams) => axios.post(`${process.env.REACT_APP_API_URL}/messages`, data, config);
 export const postNewConversation = async (data: CreateConversationParams) => axios.post<Conversation>(`${process.env.REACT_APP_API_URL}/conversations`, data, config);
 export const deleteMessage = async ({ messageId, conversationId }: DeleteMessageParams) => axios.delete<Message>(`${process.env.REACT_APP_API_URL}/messages/${messageId}`, {...config, params: { conversation: conversationId }});
+export const updateMessage = async ({ messageId, payload }: UpdateMessageParams) => axios.patch<Message>(`${process.env.REACT_APP_API_URL}/messages/${messageId}`, payload, {...config});
