@@ -75,7 +75,6 @@ export default function MessagesContainer() {
   }, [id])
   
   const handleEditMessage = useCallback((e: KeyboardEvent<HTMLInputElement>) => {
-    e.persist();
     if (e.key === "Enter") {
       const value = (e.target as HTMLInputElement).value;
       
@@ -100,7 +99,7 @@ export default function MessagesContainer() {
 			const prevMessage = messagesArray[mIdx + 1];
 			if (mIdx === messagesArray.length - 1) {
 				return (
-					<RenderWholeMessage key={msg.id} message={msg} user={user!} handleContextMenuClick={handleContextMenuClick} isEditing={isEditing} />
+					<RenderWholeMessage key={msg.id} message={msg} user={user!} handleContextMenuClick={handleContextMenuClick} isEditing={isEditing} handleEditMessage={handleEditMessage} />
 				);
 			} else if (prevMessage?.author.id === msg.author.id) {
 				return (
@@ -125,7 +124,7 @@ export default function MessagesContainer() {
 				);
 			} else {
 				return (
-					<RenderWholeMessage key={msg.id} message={msg} user={user!} handleContextMenuClick={handleContextMenuClick} isEditing={isEditing} />
+					<RenderWholeMessage key={msg.id} message={msg} user={user!} handleContextMenuClick={handleContextMenuClick} isEditing={isEditing} handleEditMessage={handleEditMessage} />
 				);
 			}
 		});
@@ -149,11 +148,13 @@ function RenderWholeMessage({
 	user,
   handleContextMenuClick,
   isEditing,
+  handleEditMessage
 }: {
 	message: Message;
 	user: User;
   handleContextMenuClick: (event: React.MouseEvent<HTMLDivElement, MouseEvent>, message: Message) => void,
   isEditing: boolean,
+  handleEditMessage: (e: KeyboardEvent<HTMLInputElement>) => void
 }) {
 	const { id, content, author, createdAt } = message;
   const { editMessage } = useContext(MessageMenuContext);
@@ -173,7 +174,7 @@ function RenderWholeMessage({
 				<MessageItemContentStyle padding="5px 0 5px 0" onContextMenu={(e) => id !== editMessage?.id && handleContextMenuClick(e, message)}>
           {isEditing && id === editMessage?.id ? (
             <div style={{ width: "100%" }}>
-              <EditMessageInputStyle defaultValue={editMessage?.content} />
+              <EditMessageInputStyle defaultValue={editMessage?.content} onKeyDown={handleEditMessage} />
               <EditMessageActionInfoStyle>
                 escape to <span>cancel</span> - enter to <span>save</span>
               </EditMessageActionInfoStyle>

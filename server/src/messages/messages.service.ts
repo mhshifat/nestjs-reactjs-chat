@@ -83,6 +83,7 @@ export class MessagesService implements IMessagesService {
         "conversation",
         "conversation.creator",
         "conversation.recipient",
+        "conversation.lastMessageSent",
         "author"
       ]
     });

@@ -59,6 +59,11 @@ export default function ConversationPage() {
 				dispatchRef.current?.(
 					modifyMessage(payload.message)
 				);
+        if (payload.conversation.lastMessageSent?.id === payload.message.id) {
+          dispatchRef.current?.(
+            updateConversation({ conversationId: payload.conversation.id, message: payload.message })
+          );
+        }
 			}
 		);
 
