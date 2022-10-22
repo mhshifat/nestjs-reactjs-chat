@@ -57,15 +57,20 @@ export type DeleteMessageParams = {
   conversationId: number;
 }
 
+export type KeyValueFilter<T> = {
+  [K in keyof T]: {
+    key: K;
+    value: T[K];
+  }
+}[keyof T]
+
 export type UpdateMessageParams = {
   messageId: number;
-  payload: {
-    key: keyof Message;
-    value: Message[keyof Message];
-  };
+  payload: KeyValueFilter<Message>;
 }
 
 export type GetMessagesResponse = {
   conversationId: number;
   messages: Message[]
 }
+
