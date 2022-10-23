@@ -48,3 +48,8 @@ export type PatchMessagePayload = {
   key: keyof Message;
   value: Message[keyof Message];
 }
+
+export type CreateGroupDetails = {
+  title?: string;
+  users: string[];
+}
