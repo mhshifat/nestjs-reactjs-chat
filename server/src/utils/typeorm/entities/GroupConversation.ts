@@ -20,7 +20,7 @@ export class GroupConversation {
   @JoinColumn({ name: "last_message_sent" })
   lastMessageSent: Message;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { createForeignKeyConstraints: false })
   @JoinColumn()
   creator: User;
 

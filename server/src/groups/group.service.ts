@@ -20,4 +20,12 @@ export class GroupService implements IGroupService {
     const groupObj = this.groupRepo.create({ users, creator: user, title: dto.title });
     return this.groupRepo.save(groupObj);
   }
+  
+  async getGroups(user: User): Promise<GroupConversation[]> {
+    return this.groupRepo
+      .createQueryBuilder("group")
+      .leftJoinAndSelect("group.users", "user")
+      .where("user.id IN (:users)", { users: [user.id] })
+      .getMany();
+  }
 }
