@@ -28,4 +28,8 @@ export class GroupService implements IGroupService {
       .where("user.id IN (:users)", { users: [user.id] })
       .getMany();
   }
+  
+  async getGroupById(user: User, groupId: number): Promise<GroupConversation> {
+    return this.groupRepo.findOne({ where: { id: groupId }, relations: ["users", "creator", "lastMessageSent"] });
+  }
 }
