@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, DeleteMessageParams, GetMessagesResponse, Message, UpdateMessageParams, UserCredentialsParams } from './types';
+import { Conversation, CreateConversationParams, CreateMessageParams, CreateUserParams, DeleteMessageParams, GetMessagesResponse, Group, Message, UpdateMessageParams, UserCredentialsParams } from './types';
 
 const config: AxiosRequestConfig = {
   withCredentials: true,
@@ -14,3 +14,4 @@ export const postNewMessage = async (data: CreateMessageParams) => axios.post(`$
 export const postNewConversation = async (data: CreateConversationParams) => axios.post<Conversation>(`${process.env.REACT_APP_API_URL}/conversations`, data, config);
 export const deleteMessage = async ({ messageId, conversationId }: DeleteMessageParams) => axios.delete<Message>(`${process.env.REACT_APP_API_URL}/messages/${messageId}`, {...config, params: { conversation: conversationId }});
 export const updateMessage = async ({ messageId, payload }: UpdateMessageParams) => axios.patch<Message>(`${process.env.REACT_APP_API_URL}/messages/${messageId}`, payload, {...config});
+export const getGroups = async (controller?: AbortController) => axios.get<Group[]>(`${process.env.REACT_APP_API_URL}/groups`, { ...config, signal: controller?.signal });

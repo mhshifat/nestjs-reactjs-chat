@@ -369,3 +369,27 @@ export const EditMessageActionInfoStyle = styled.div`
     font-style: normal;
   }
 `;
+
+export const ConversationSelectorStyle = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  padding: 20px 32px;
+  background: #0f0f0f;
+  border-bottom: 1px solid #4343435f;
+  box-sizing: border-box;
+
+  & .item {
+    padding: 8px 24px;
+    border-radius: 50px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  & .item.selected {
+    background: #d3d3d3;
+    color: #101010;
+    font-weight: 500;
+  }
+`;

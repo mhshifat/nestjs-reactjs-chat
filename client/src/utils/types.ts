@@ -74,3 +74,14 @@ export type GetMessagesResponse = {
   messages: Message[]
 }
 
+export type Group = {
+  id: number;
+  title?: string;
+  users: User[];
+  creator: User;
+  messages?: [];
+  createdAt: number;
+  lastMessageSent: Message;
+  lastMesageSentAt: Date;
+}
+

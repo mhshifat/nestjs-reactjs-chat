@@ -42,6 +42,17 @@ function App() {
 								<Route index element={<ConversationPanel />} />
 								<Route path=":id" element={<ConversationChannelPage />} />
 							</Route>
+							<Route
+								path="groups"
+								element={
+									<AuthenticatedRoute>
+										<ConversationPage />
+									</AuthenticatedRoute>
+								}
+							>
+								<Route index element={<ConversationPanel />} />
+								<Route path=":id" element={<ConversationChannelPage />} />
+							</Route>
 						</Routes>
 					</BrowserRouter>
 				</SocketContext.Provider>

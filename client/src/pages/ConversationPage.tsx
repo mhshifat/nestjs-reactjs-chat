@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import ConversationSidebar from "../components/conversations/ConversationSidebar";
 import { AppDisopatch } from "../store";
 import { addConversation, fetchConversationsThunk, updateConversation } from "../store/conversationsSlice";
+import { fetchGroupsThunk } from "../store/groupSlice";
 import { addMessage, modifyMessage, removeMessage } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { Page } from "../utils/styles";
@@ -17,6 +18,7 @@ export default function ConversationPage() {
 
 	useEffect(() => {
 		dispatchRef.current?.(fetchConversationsThunk()).catch(console.error);
+		dispatchRef.current?.(fetchGroupsThunk()).catch(console.error);
 	}, []);
 
   useEffect(() => {
