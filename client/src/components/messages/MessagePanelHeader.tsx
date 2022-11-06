@@ -9,11 +9,30 @@ export default function MessagePanelHeader() {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
   const conversation = useSelector((state: RootState) => state.conversationsState.conversations.find(con => con.id === +id!));
+  const chatType = useSelector(
+		(state: RootState) => state.selectedState.type
+	);
+  const groups = useSelector(
+		(state: RootState) => state.groupsState.groups
+	);
 
   const conversationRecipient = useMemo(() => {
     return user?.id === conversation?.creator.id ? conversation?.recipient : conversation?.creator;
   }, [user, conversation])
+  const groupName = useMemo(() => {
+    return groups.find(group => group.id === +id!)?.title || "Group"
+  }, [groups, id])
   return (
-		<MessagePanelHeaderStyle>{conversationRecipient?.firstName} {conversationRecipient?.lastName}</MessagePanelHeaderStyle>
+		<MessagePanelHeaderStyle>
+      {chatType === "private" ? (
+        <>
+          {conversationRecipient?.firstName} {conversationRecipient?.lastName}
+        </>
+      ) : (
+        <>
+          {groupName}
+        </>
+      )}
+    </MessagePanelHeaderStyle>
 	);
 }

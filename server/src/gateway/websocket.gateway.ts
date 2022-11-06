@@ -33,8 +33,8 @@ export class MessagingGateway implements OnGatewayConnection {
     @MessageBody("conversationId", ParseIntPipe) conversationId: number,
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
-    client.join(String(conversationId));
-    client.to(String(conversationId)).emit("userJoin");
+    client.join(`conversations-${String(conversationId)}`);
+    client.to(`conversations-${String(conversationId)}`).emit("userJoin");
   }
 
   @SubscribeMessage("onConversationLeave")
@@ -42,8 +42,8 @@ export class MessagingGateway implements OnGatewayConnection {
     @MessageBody("conversationId", ParseIntPipe) conversationId: number,
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
-    client.leave(String(conversationId));
-    client.to(String(conversationId)).emit("userLeave");
+    client.leave(`conversations-${String(conversationId)}`);
+    client.to(`conversations-${String(conversationId)}`).emit("userLeave");
   }
 
   @SubscribeMessage("onUserTyping")
@@ -51,7 +51,7 @@ export class MessagingGateway implements OnGatewayConnection {
     @MessageBody("conversationId", ParseIntPipe) conversationId: number,
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
-    client.to(String(conversationId)).emit("onUserTyping");
+    client.to(`conversations-${String(conversationId)}`).emit("onUserTyping");
   }
 
   @SubscribeMessage("onUserStopedTyping")
@@ -59,7 +59,7 @@ export class MessagingGateway implements OnGatewayConnection {
     @MessageBody("conversationId", ParseIntPipe) conversationId: number,
     @ConnectedSocket() client: AuthenticatedSocket,
   ) {
-    client.to(String(conversationId)).emit("onUserStopedTyping");
+    client.to(`conversations-${String(conversationId)}`).emit("onUserStopedTyping");
   }
 
   @OnEvent("message.create")

@@ -5,6 +5,7 @@ export enum Routes {
   CONVERSATIONS = 'conversations',
   MESSAGES = 'messages',
   GROUPS = 'groups',
+  GROUP_MESSAGES = 'group-messages',
 }
 
 export enum Services {
@@ -15,4 +16,5 @@ export enum Services {
   MESSAGES = 'MESSAGES_SERVICE',
   GATEAWAY_SESSION = 'GATEAWAY_SESSION_SERVICE',
   GROUPS = 'GROUPS_SERVICE',
+  GROUP_MESSAGES = 'GROUP_MESSAGES_SERVICE',
 }

@@ -8,6 +8,7 @@ import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { GatewayModule } from './gateway/gateway.module';
 import { GroupModule } from './groups/group.module';
+import { GroupMessagesModule } from './group-messages/group-messages.module';
 import entities from './utils/typeorm';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 
@@ -33,6 +34,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     MessagesModule,
     GatewayModule,
     GroupModule,
+    GroupMessagesModule
   ],
   controllers: [],
   providers: [],

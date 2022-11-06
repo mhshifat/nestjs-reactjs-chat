@@ -7,18 +7,21 @@ import {
 import { TbEdit } from "react-icons/tb";
 import { Conversation, Group } from "../../utils/types";
 import styles from "./index.module.scss";
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CreateConversationModal from "./../modals/CreateConversationModal";
 import useAuth from "../../hooks/useAuth";
-import { RootState } from "../../store";
-import { useSelector } from "react-redux";
+import { AppDisopatch, RootState } from "../../store";
+import { useDispatch, useSelector } from "react-redux";
 import ConversationSelector from "./ConversationSelector";
+import { setType } from "../../store/selectedSlice";
 
 export default function ConversationSidebar() {
 	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { pathname } = useLocation();
 	const [showModal, setShowModal] = useState(false);
+  const dispatch = useDispatch<AppDisopatch>();
 	const conversations = useSelector(
 		(state: RootState) => state.conversationsState.conversations
 	);
@@ -44,6 +47,16 @@ export default function ConversationSidebar() {
 				: conversation.creator,
 		[user?.id]
 	);
+  const funtionRefs = useRef({
+    dispatch,
+  })
+
+  useEffect(() => {
+    if (chatType === "private" && !pathname.includes("conversation")) {
+      funtionRefs.current.dispatch(setType("group"))
+    }
+  }, [pathname, chatType]);
+
 	return (
 		<>
 			{showModal && <CreateConversationModal setShowModal={setShowModal} />}

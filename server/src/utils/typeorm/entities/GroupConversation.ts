@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, Index, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { GroupMessage } from "./GroupMessage";
 import { Message } from "./Message";
 import { User } from "./User";
 
@@ -28,7 +29,7 @@ export class GroupConversation {
   @JoinTable()
   users: User[];
 
-  @OneToMany(() => Message, (message) => message.groupConversation, {
+  @OneToMany(() => GroupMessage, (message) => message.groupConversation, {
     cascade: ["insert", "update", "remove"]
   })
   @JoinColumn()
