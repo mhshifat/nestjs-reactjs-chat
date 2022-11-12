@@ -3,6 +3,8 @@ import {
 	MessageInputContainerStyle,
 	MessageInputStyle,
 } from "../../utils/styles";
+import { BsEmojiSmile } from "react-icons/bs";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 interface Props {
 	message: string;
@@ -20,6 +22,9 @@ export default function MessageInputField({
 	return (
 		<>
 			<MessageInputContainerStyle>
+        <button>
+          <AiOutlinePlusCircle />
+        </button>
 				<form onSubmit={sendMessage}>
 					<MessageInputStyle
 						spellCheck={false}
@@ -28,6 +33,9 @@ export default function MessageInputField({
 						onKeyDown={sendTypingStatus}
 					/>
 				</form>
+        <button>
+          <BsEmojiSmile />
+        </button>
 			</MessageInputContainerStyle>
 		</>
 	);

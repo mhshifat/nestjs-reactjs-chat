@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { RootState } from "../../store";
 import { AuthContext } from "../../utils/contexts/AuthContext";
 import { MessagePanelHeaderStyle } from "../../utils/styles";
+import { FiPhoneCall } from "react-icons/fi";
+import { CgProfile } from "react-icons/cg";
 
 export default function MessagePanelHeader() {
   const { id } = useParams();
@@ -24,15 +26,26 @@ export default function MessagePanelHeader() {
   }, [groups, id])
   return (
 		<MessagePanelHeaderStyle>
-      {chatType === "private" ? (
-        <>
-          {conversationRecipient?.firstName} {conversationRecipient?.lastName}
-        </>
-      ) : (
-        <>
-          {groupName}
-        </>
-      )}
+      <div>
+        <img src="https://picsum.photos/200" alt="" />
+        {chatType === "private" ? (
+          <>
+            {conversationRecipient?.firstName} {conversationRecipient?.lastName}
+          </>
+        ) : (
+          <>
+            {groupName}
+          </>
+        )}
+      </div>
+      <div>
+        <button>
+          <FiPhoneCall />
+        </button>
+        <button>
+          <CgProfile />
+        </button>
+      </div>
     </MessagePanelHeaderStyle>
 	);
 }

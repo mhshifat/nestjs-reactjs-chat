@@ -7,7 +7,7 @@ import {
 	PageProps,
 } from "./styleTypes";
 
-const SIDEBAR_WIDTH = 320;
+const SIDEBAR_WIDTH = 350;
 
 export const InputContainer = styled.div<InputContainerProps>`
 	background-color: ${({ backgroundColor }) => backgroundColor || "#131313"};
@@ -84,6 +84,7 @@ export const CoversationsSidebarStyle = styled.aside`
 	background-color: #1a1a1a;
 	border-right: 1px solid #5454543d;
 	overflow-y: auto;
+  display: flex;
 
 	&::-webkit-scrollbar {
 		width: 10px;
@@ -96,22 +97,25 @@ export const CoversationsSidebarStyle = styled.aside`
 `;
 
 export const ConversationSidebarHeader = styled.header`
-	background-color: #151515;
-	height: 65px;
+	background-color: #0f0f0f;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 32px;
+	padding: 20px;
 	border-bottom: 1px solid #5454543d;
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: ${SIDEBAR_WIDTH}px;
+	width: 100%;
 	box-sizing: border-box;
-
-	& h1 {
-		font-weight: 500;
-		font-size: 18px;
+  
+	& input {
+    width: 100%;
+    box-sizing: border-box;
+    height: 35px;
+    background: #151515;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 0 10px;
+    color: #f2f5f7;
 	}
 `;
 
@@ -121,17 +125,16 @@ export const CoversationChannelPage = styled.div`
 `;
 
 export const CoversationsSidebarContainer = styled.div`
-	padding-top: 65px;
 `;
 
 export const CoversationsSidebarItem = styled.div`
 	display: flex;
 	align-items: center;
 	gap: 12px;
-	padding: 12px 24px;
 	border-bottom: 1px solid #5454543d;
 	cursor: pointer;
-	background: #131313;
+	background: #0f0f0f;
+  padding: 10px 20px;
 `;
 
 export const OverlayStyle = styled.div`
@@ -220,6 +223,28 @@ export const MessageInputContainerStyle = styled.div`
 	background: #101010;
 	border-radius: 10px;
 	padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  & > form {
+    flex: 1;
+  }
+
+  & > button {
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+
+    & > svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 export const MessageInputStyle = styled.input`
@@ -284,7 +309,7 @@ export const MessageItemContentStyle = styled.div<MessageItemContentProps>`
 `;
 
 export const MessagePanelHeaderStyle = styled.header`
-	background: #151515;
+	background: #0f0f0f;
 	border-bottom: 1px solid #5454543d;
 	border-left: 1px solid #5454543d;
 	height: 65px;
@@ -297,6 +322,31 @@ export const MessagePanelHeaderStyle = styled.header`
 	top: 0;
 	left: 0;
 	width: 100%;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    & > img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    & > button {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: #fff;
+      cursor: pointer;
+
+      & > svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
 `;
 
 export const DeletedMessageStyle = styled.span`
@@ -374,22 +424,71 @@ export const ConversationSelectorStyle = styled.div`
   width: 100%;
   display: flex;
   gap: 10px;
-  padding: 20px 32px;
+  padding: 20px;
   background: #0f0f0f;
   border-bottom: 1px solid #4343435f;
   box-sizing: border-box;
 
   & .item {
     padding: 8px 24px;
-    border-radius: 50px;
+    border-radius: 5px;
     font-size: 12px;
     cursor: pointer;
     font-weight: 500;
-  }
-
-  & .item.selected {
-    background: #d3d3d3;
-    color: #101010;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #151515;
     font-weight: 500;
+    opacity: .5;
   }
+  
+  & .item.selected {
+    opacity: 1;
+  }
+  `;
+
+export const CoversationsSidePanelStyle = styled.div`
+  width: 60px;
+  background: #0f0f0f;
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+
+  & > ul {
+    list-style: none;
+    padding: 0;
+
+    &:last-child {
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+
+    & > li {
+      width: 100%;
+      padding: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      
+      & > svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+`;
+
+export const CoversationsSidePanelUserImageStyle = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
+export const ConversationSidebarHolderStyle = styled.div`
+  flex: 1;
+  border-left: 1px solid #5454543d;
+  background: #0f0f0f;
 `;
