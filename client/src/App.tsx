@@ -2,7 +2,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ConversationPage from "./pages/ConversationPage";
+import GroupPage from "./pages/GroupPage";
 import ConversationChannelPage from "./pages/ConversationChannelPage";
+import GroupChannelPage from "./pages/GroupChannelPage";
 import ConversationPanel from "./components/conversations/ConversationPanel";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import { AuthContext } from "./utils/contexts/AuthContext";
@@ -46,12 +48,12 @@ function App() {
 								path="groups"
 								element={
 									<AuthenticatedRoute>
-										<ConversationPage />
+										<GroupPage />
 									</AuthenticatedRoute>
 								}
 							>
 								<Route index element={<ConversationPanel />} />
-								<Route path=":id" element={<ConversationChannelPage />} />
+								<Route path=":id" element={<GroupChannelPage />} />
 							</Route>
 						</Routes>
 					</BrowserRouter>

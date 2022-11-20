@@ -3,22 +3,23 @@ import { useDispatch } from "react-redux";
 import { Outlet } from "react-router-dom";
 import ConversationSidebar from "../components/conversations/ConversationSidebar";
 import { AppDisopatch } from "../store";
-import { addConversation, fetchConversationsThunk, updateConversation } from "../store/conversationsSlice";
+import { addConversation, updateConversation } from "../store/conversationsSlice";
 import { setType } from "../store/selectedSlice";
+import { fetchGroupsThunk } from "../store/groupSlice";
 import { addMessage, modifyMessage, removeMessage } from "../store/messagesSlice";
 import { SocketContext } from "../utils/contexts/SocketContext";
 import { Page } from "../utils/styles";
 import { Conversation, Message, MessageEventPayload } from "../utils/types";
 
-export default function ConversationPage() {
+export default function GroupPage() {
 	const dispatch = useDispatch<AppDisopatch>();
 	const dispatchRef = useRef(dispatch);
   const socket = useContext(SocketContext);
 	const socketRef = useRef(socket);
 
 	useEffect(() => {
-		dispatchRef.current?.(setType("private"));
-		dispatchRef.current?.(fetchConversationsThunk()).catch(console.error);
+		dispatchRef.current?.(setType("group"));
+		dispatchRef.current?.(fetchGroupsThunk()).catch(console.error);
 	}, []);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export default function ConversationPage() {
 			console.log("Connected")
 		);
 		const onMessageListener = socketRef.current?.on(
-			"onMessage",
+			"onGroupMessage",
 			({ conversation, ...message }: MessageEventPayload) => {
 				dispatchRef.current?.(
 					updateConversation({ conversationId: conversation.id, message })
@@ -45,7 +46,7 @@ export default function ConversationPage() {
 			}
 		);
 		const onMessageDeleteListener = socketRef.current?.on(
-			"onMessageDelete",
+			"onGroupMessageDelete",
 			(payload: { message: Message, conversation: Conversation }) => {
 				dispatchRef.current?.(
 					removeMessage(payload)
@@ -56,7 +57,7 @@ export default function ConversationPage() {
 			}
 		);
 		const onMessageUpdateListener = socketRef.current?.on(
-			"onMessageUpdate",
+			"onGroupMessageUpdate",
 			(payload: { message: Message, conversation: Conversation }) => {
 				dispatchRef.current?.(
 					modifyMessage(payload.message)
@@ -71,10 +72,10 @@ export default function ConversationPage() {
 
 		return () => {
 			connectListener.off("connected");
-			onMessageListener.off("onMessage");
+			onMessageListener.off("onGroupMessage");
 			onConversationListener.off("onConversation");
-			onMessageDeleteListener.off("onMessageDelete");
-			onMessageUpdateListener.off("onMessageUpdate");
+			onMessageDeleteListener.off("onGroupMessageDelete");
+			onMessageUpdateListener.off("onGroupMessageUpdate");
 		};
 	}, []);
 

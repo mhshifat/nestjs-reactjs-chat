@@ -452,7 +452,7 @@ export const ConversationSelectorStyle = styled.div`
 export const CoversationsSidePanelStyle = styled.div`
   width: 60px;
   background: #0f0f0f;
-  padding: 20px 10px;
+  padding: 20px 10px 5px 10px;
   display: flex;
   flex-direction: column;
 
